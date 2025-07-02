@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배포된 위젯 테스트</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .info {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            backdrop-filter: blur(10px);
+            text-align: left;
+        }
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            overflow-x: auto;
+            color: #e2e8f0;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .test-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            color: white;
+        }
+        .test-btn.orange { background: #ff6b35; }
+        .test-btn.blue { background: #4299e1; }
+        .test-btn.green { background: #48bb78; }
+        .test-btn.purple { background: #9f7aea; }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+        }
+        .success { background: rgba(72, 187, 120, 0.2); }
+        .error { background: rgba(245, 101, 101, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 배포된 위젯 테스트</h1>
+        
+        <div class="info">
+            <h3>📡 원격 위젯 테스트</h3>
+            <p>이 페이지는 Amplify에 배포된 위젯을 로컬에서 테스트하는 페이지입니다.</p>
+            
+            <div class="code-block">
+&lt;script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
+            </div>
+            
+            <div id="widget-status" class="status">
+                위젯 로딩 중...
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>🎨 테마 테스트</h3>
+            <p>다양한 테마로 위젯을 테스트해보세요:</p>
+            
+            <div class="test-buttons">
+                <button class="test-btn orange" onclick="testOrangeTheme()">🧡 오렌지</button>
+                <button class="test-btn blue" onclick="testBlueTheme()">💙 파란색</button>
+                <button class="test-btn green" onclick="testGreenTheme()">💚 초록색</button>
+                <button class="test-btn purple" onclick="testPurpleTheme()">💜 보라색</button>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>📋 사용법</h3>
+            <p>다른 웹사이트에서 위젯을 사용하려면:</p>
+            <div class="code-block">
+&lt;script&gt;
+window.chatbotWidgetOptions = {
+    title: '🤖 My AI Assistant',
+    primaryColor: '#ff6b35',
+    secondaryColor: '#f7931e',
+    position: 'right'
+};
+&lt;/script&gt;
+&lt;script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 위젯 로딩 상태 확인
+        function checkWidgetStatus() {
+            const statusDiv = document.getElementById('widget-status');
+            
+            if (window.ChatbotWidget) {
+                statusDiv.textContent = '✅ 위젯이 성공적으로 로드되었습니다!';
+                statusDiv.className = 'status success';
+            } else {
+                statusDiv.textContent = '❌ 위젯 로딩 실패 - 네트워크 연결을 확인하세요';
+                statusDiv.className = 'status error';
+            }
+        }
+
+        // 기존 위젯 제거 함수
+        function removeExistingWidget() {
+            const existingTrigger = document.querySelector('.chatbot-trigger');
+            const existingModal = document.querySelector('.chatbot-modal');
+            const existingOverlay = document.querySelector('.chatbot-overlay');
+            
+            if (existingTrigger) existingTrigger.remove();
+            if (existingModal) existingModal.remove();
+            if (existingOverlay) existingOverlay.remove();
+        }
+
+        // 테마 테스트 함수들
+        function testOrangeTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '🧡 오렌지 챗봇',
+                primaryColor: '#ff6b35',
+                secondaryColor: '#f7931e',
+                position: 'right'
+            });
+        }
+
+        function testBlueTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '💙 파란색 어시스턴트',
+                primaryColor: '#4299e1',
+                secondaryColor: '#3182ce',
+                position: 'right'
+            });
+        }
+
+        function testGreenTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '💚 초록색 도우미',
+                primaryColor: '#48bb78',
+                secondaryColor: '#38a169',
+                position: 'right'
+            });
+        }
+
+        function testPurpleTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '💜 보라색 챗봇',
+                primaryColor: '#9f7aea',
+                secondaryColor: '#805ad5',
+                position: 'right'
+            });
+        }
+
+        // 3초 후 위젯 상태 확인
+        setTimeout(checkWidgetStatus, 3000);
+    </script>
+
+    <!-- 배포된 위젯 로드 -->
+    <script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"></script>
+</body>
+</html>

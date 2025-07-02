@@ -96,12 +96,12 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.5);
+                    background: rgba(0, 0, 0, 0.7);
                     z-index: 9999;
                     opacity: 0;
                     visibility: hidden;
                     transition: all 0.3s ease;
-                    backdrop-filter: blur(4px);
+                    backdrop-filter: blur(8px);
                 }
 
                 .chatbot-overlay.open {
@@ -193,6 +193,7 @@
                 .chatbot-content {
                     flex: 1;
                     overflow: hidden;
+                    border-radius: 0 0 ${this.config.position === 'left' ? '20px 0' : '0 20px'};
                 }
 
                 .chatbot-iframe {
@@ -200,6 +201,7 @@
                     height: 100%;
                     border: none;
                     background: #f8f9fa;
+                    border-radius: 0 0 ${this.config.position === 'left' ? '20px 0' : '0 20px'};
                 }
 
                 .chatbot-loading {
@@ -267,6 +269,14 @@
                     .chatbot-modal {
                         top: 0;
                         height: 100%;
+                        border-radius: 0;
+                    }
+                    
+                    .chatbot-content {
+                        border-radius: 0;
+                    }
+                    
+                    .chatbot-iframe {
                         border-radius: 0;
                     }
                 }
