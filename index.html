@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>챗봇 위젯 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .content {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .config-example {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #4299e1;
+        }
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .feature-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .test-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .test-btn.primary {
+            background: #ff6b35;
+            color: white;
+        }
+        .test-btn.secondary {
+            background: #4299e1;
+            color: white;
+        }
+        .test-btn.success {
+            background: #48bb78;
+            color: white;
+        }
+        .test-btn.purple {
+            background: #a405d0;
+            color: white;
+        }
+        .test-btn.orange {
+            background: #ff6b35;
+            color: white;
+        }
+        .test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 챗봇 위젯 테스트 페이지</h1>
+        
+        <div class="content">
+            <p>이 페이지는 챗봇 위젯의 동작을 테스트하기 위한 샘플 페이지입니다.</p>
+            <p>화면 오른쪽 하단에 챗봇 트리거 버튼이 표시되며, 클릭하면 모달이 슬라이드되어 나타납니다.</p>
+        </div>
+
+        <div class="demo-section">
+            <h3>📋 기본 사용 방법</h3>
+            <p>다른 웹사이트에서 이 위젯을 사용하려면 다음 스크립트를 추가하세요:</p>
+            <div class="code-block">
+&lt;script src="https://your-domain.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>🎨 커스터마이징 옵션</h3>
+            <p>위젯의 제목, 색상, 위치 등을 커스터마이징할 수 있습니다:</p>
+            <div class="config-example">
+&lt;script&gt;
+// 설정 옵션 정의
+window.chatbotWidgetOptions = {
+    title: '💬 고객 지원',
+    primaryColor: '#4299e1',
+    secondaryColor: '#3182ce',
+    position: 'right',
+    chatbotUrl: 'https://your-chatbot-url.com'
+};
+&lt;/script&gt;
+&lt;script src="https://your-domain.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
+            </div>
+
+            <h4>🔧 사용 가능한 옵션들:</h4>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <strong>title</strong><br>
+                    <small>모달 헤더에 표시될 제목</small>
+                </div>
+                <div class="feature-item">
+                    <strong>primaryColor</strong><br>
+                    <small>주 색상 (hex 코드)</small>
+                </div>
+                <div class="feature-item">
+                    <strong>secondaryColor</strong><br>
+                    <small>보조 색상 (hex 코드)</small>
+                </div>
+                <div class="feature-item">
+                    <strong>position</strong><br>
+                    <small>'left' 또는 'right'</small>
+                </div>
+                <div class="feature-item">
+                    <strong>chatbotUrl</strong><br>
+                    <small>챗봇 iframe URL</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>🧪 실시간 테스트</h3>
+            <p>아래 버튼들을 클릭하여 다양한 설정으로 위젯을 테스트해보세요:</p>
+            <div class="test-buttons">
+                <button class="test-btn orange" onclick="testOrangeTheme()">오렌지 테마</button>
+                <button class="test-btn secondary" onclick="testBlueTheme()">파란색 테마</button>
+                <button class="test-btn success" onclick="testGreenTheme()">초록색 테마</button>
+                <button class="test-btn purple" onclick="testPurpleTheme()">보라색 테마</button>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>✨ 주요 개선사항</h3>
+            <ul>
+                <li><strong>컴팩트한 헤더:</strong> 패딩과 높이를 최소화하여 더 많은 콘텐츠 공간 확보</li>
+                <li><strong>설정 가능한 옵션:</strong> 제목, 색상, 위치를 클라이언트에서 쉽게 커스터마이징</li>
+                <li><strong>반응형 디자인:</strong> 모든 디바이스에서 최적화된 경험</li>
+                <li><strong>부드러운 애니메이션:</strong> 현대적이고 세련된 사용자 경험</li>
+                <li><strong>접근성 지원:</strong> 키보드 네비게이션 및 스크린 리더 지원</li>
+            </ul>
+        </div>
+
+        <div style="height: 1000px; background: linear-gradient(to bottom, #f8f9fa, #e9ecef); margin: 40px -40px -40px -40px; padding: 40px; border-radius: 0 0 20px 20px;">
+            <h3>📜 스크롤 테스트 영역</h3>
+            <p>이 영역은 스크롤 테스트를 위한 긴 콘텐츠입니다. 스크롤을 내려도 챗봇 버튼이 고정 위치에 유지되는지 확인해보세요.</p>
+            <div style="margin-top: 200px;">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            </div>
+            <div style="margin-top: 200px;">
+                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div style="margin-top: 200px;">
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 테스트 함수들
+        function testBlueTheme() {
+            // 기존 위젯 제거
+            removeExistingWidget();
+            
+            // 새로운 설정으로 위젯 생성
+            new window.ChatbotWidget({
+                title: '💙 파란색 어시스턴트',
+                primaryColor: '#4299e1',
+                secondaryColor: '#3182ce',
+                position: 'right'
+            });
+        }
+
+        function testGreenTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '💚 초록색 도우미',
+                primaryColor: '#48bb78',
+                secondaryColor: '#38a169',
+                position: 'right'
+            });
+        }
+
+        function testOrangeTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '🧡 오렌지 챗봇',
+                primaryColor: '#ff6b35',
+                secondaryColor: '#f7931e',
+                position: 'right'
+            });
+        }
+
+        function testPurpleTheme() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '💜 보라색 챗봇',
+                primaryColor: '#9f7aea',
+                secondaryColor: '#805ad5',
+                position: 'right'
+            });
+        }
+
+        function removeExistingWidget() {
+            // 기존 위젯 요소들 제거
+            const existingTrigger = document.querySelector('.chatbot-trigger');
+            const existingModal = document.querySelector('.chatbot-modal');
+            const existingOverlay = document.querySelector('.chatbot-overlay');
+            
+            if (existingTrigger) existingTrigger.remove();
+            if (existingModal) existingModal.remove();
+            if (existingOverlay) existingOverlay.remove();
+        }
+    </script>
+
+    <!-- 챗봇 위젯 스크립트 로드 -->
+    <script type="module" src="/src/chatbot-widget.js"></script>
+</body>
+</html>

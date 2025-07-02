@@ -1,0 +1,484 @@
+(function() {
+    'use strict';
+
+    // 위젯이 이미 로드되었는지 확인
+    if (window.ChatbotWidget) {
+        return;
+    }
+
+    class ChatbotWidget {
+        constructor(options = {}) {
+            // 기본 설정
+            this.config = {
+                title: options.title || '🤖 AI Navi',
+                primaryColor: options.primaryColor || '#ff6b35',
+                secondaryColor: options.secondaryColor || '#f7931e',
+                chatbotUrl: options.chatbotUrl || 'https://develop.dqrr6detrv39g.amplifyapp.com/',
+                position: options.position || 'right', // 'left' or 'right'
+                ...options
+            };
+
+            this.isOpen = false;
+            this.triggerButton = null;
+            this.modal = null;
+            this.overlay = null;
+            this.iframe = null;
+            
+            this.init();
+        }
+
+        init() {
+            // DOM이 로드된 후 위젯 생성
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => this.createWidget());
+            } else {
+                this.createWidget();
+            }
+        }
+
+        createWidget() {
+            this.createStyles();
+            this.createTriggerButton();
+            this.createModal();
+            this.bindEvents();
+        }
+
+        createStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .chatbot-widget * {
+                    box-sizing: border-box;
+                }
+
+                .chatbot-trigger {
+                    position: fixed;
+                    bottom: 24px;
+                    ${this.config.position}: 24px;
+                    width: 64px;
+                    height: 64px;
+                    background: linear-gradient(135deg, ${this.config.primaryColor} 0%, ${this.config.secondaryColor} 100%);
+                    border: none;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    z-index: 9998;
+                    box-shadow: 0 8px 32px ${this.hexToRgba(this.config.primaryColor, 0.4)};
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                }
+
+                .chatbot-trigger:hover {
+                    transform: scale(1.1);
+                    box-shadow: 0 12px 40px ${this.hexToRgba(this.config.primaryColor, 0.6)};
+                    background: linear-gradient(135deg, ${this.darkenColor(this.config.primaryColor, 10)} 0%, ${this.darkenColor(this.config.secondaryColor, 10)} 100%);
+                }
+
+                .chatbot-trigger:active {
+                    transform: scale(0.95);
+                }
+
+                .chatbot-trigger-icon {
+                    width: 28px;
+                    height: 28px;
+                    fill: white;
+                    transition: transform 0.3s ease;
+                }
+
+                .chatbot-trigger.open .chatbot-trigger-icon {
+                    transform: rotate(180deg);
+                }
+
+                .chatbot-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 9999;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(4px);
+                }
+
+                .chatbot-overlay.open {
+                    opacity: 1;
+                    visibility: visible;
+                }
+
+                .chatbot-modal {
+                    position: fixed;
+                    top: 5%;
+                    ${this.config.position === 'left' ? 'left' : 'right'}: 0;
+                    width: 50%;
+                    height: 90%;
+                    background: white;
+                    border-radius: ${this.config.position === 'left' ? '0 20px 20px 0' : '20px 0 0 20px'};
+                    box-shadow: ${this.config.position === 'left' ? '10px' : '-10px'} 0 50px rgba(0, 0, 0, 0.3);
+                    z-index: 10000;
+                    transform: translateX(${this.config.position === 'left' ? '-100%' : '100%'});
+                    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                }
+
+                .chatbot-modal.open {
+                    transform: translateX(0);
+                }
+
+                .chatbot-header {
+                    background: linear-gradient(135deg, ${this.config.primaryColor} 0%, ${this.config.secondaryColor} 100%);
+                    color: white;
+                    padding: 8px 16px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    flex-shrink: 0;
+                    min-height: 36px;
+                }
+
+                .chatbot-title {
+                    font-size: 14px;
+                    font-weight: 600;
+                    margin: 0;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    line-height: 1.1;
+                }
+
+                .chatbot-close {
+                    background: rgba(0, 0, 0, 0.15);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    color: white;
+                    cursor: pointer;
+                    padding: 6px;
+                    border-radius: 50%;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 30px;
+                    min-height: 30px;
+                    opacity: 1;
+                    backdrop-filter: blur(8px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .chatbot-close:hover {
+                    background: rgba(0, 0, 0, 0.25);
+                    border-color: rgba(255, 255, 255, 0.5);
+                    transform: scale(1.05);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                }
+
+                .chatbot-close:active {
+                    transform: scale(0.95);
+                    background: rgba(0, 0, 0, 0.35);
+                }
+
+                .chatbot-close-icon {
+                    width: 16px;
+                    height: 16px;
+                    fill: none;
+                    stroke: currentColor;
+                    stroke-width: 2.5px;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+                }
+
+                .chatbot-content {
+                    flex: 1;
+                    overflow: hidden;
+                }
+
+                .chatbot-iframe {
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    background: #f8f9fa;
+                }
+
+                .chatbot-loading {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    color: #666;
+                }
+
+                .chatbot-spinner {
+                    width: 40px;
+                    height: 40px;
+                    border: 3px solid #f3f3f3;
+                    border-top: 3px solid ${this.config.primaryColor};
+                    border-radius: 50%;
+                    animation: chatbot-spin 1s linear infinite;
+                    margin-right: 12px;
+                }
+
+                @keyframes chatbot-spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+
+                /* 모바일 반응형 */
+                @media (max-width: 768px) {
+                    .chatbot-modal {
+                        width: 100%;
+                        top: 10%;
+                        height: 90%;
+                        border-radius: 20px 20px 0 0;
+                        ${this.config.position}: 0;
+                        transform: translateY(100%);
+                    }
+                    
+                    .chatbot-modal.open {
+                        transform: translateY(0);
+                    }
+                    
+                    .chatbot-trigger {
+                        bottom: 20px;
+                        ${this.config.position}: 20px;
+                        width: 56px;
+                        height: 56px;
+                    }
+                    
+                    .chatbot-trigger-icon {
+                        width: 24px;
+                        height: 24px;
+                    }
+
+                    .chatbot-header {
+                        padding: 6px 12px;
+                        min-height: 32px;
+                    }
+
+                    .chatbot-title {
+                        font-size: 13px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .chatbot-modal {
+                        top: 0;
+                        height: 100%;
+                        border-radius: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        createTriggerButton() {
+            this.triggerButton = document.createElement('button');
+            this.triggerButton.className = 'chatbot-trigger';
+            this.triggerButton.innerHTML = `
+                <svg class="chatbot-trigger-icon" viewBox="0 0 24 24" fill="white" stroke="none">
+                    <path d="M18 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>
+                    <path d="M4 18h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2H4"/>
+                    <rect x="6" y="6" width="12" height="12" rx="2" fill="white"/>
+                    <circle cx="9" cy="10" r="1" fill="#ff6b35"/>
+                    <circle cx="15" cy="10" r="1" fill="#ff6b35"/>
+                    <rect x="10" y="13" width="4" height="1" rx="0.5" fill="#ff6b35"/>
+                </svg>
+            `;
+            this.triggerButton.setAttribute('aria-label', '챗봇 열기');
+            document.body.appendChild(this.triggerButton);
+        }
+
+        createModal() {
+            // 오버레이 생성
+            this.overlay = document.createElement('div');
+            this.overlay.className = 'chatbot-overlay';
+            
+            // 모달 생성
+            this.modal = document.createElement('div');
+            this.modal.className = 'chatbot-modal';
+            
+            // 헤더 생성
+            const header = document.createElement('div');
+            header.className = 'chatbot-header';
+            header.innerHTML = `
+                <h3 class="chatbot-title">${this.config.title}</h3>
+                <button class="chatbot-close" aria-label="챗봇 닫기" title="챗봇 닫기">
+                    <svg class="chatbot-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            `;
+            
+            // 콘텐츠 영역 생성
+            const content = document.createElement('div');
+            content.className = 'chatbot-content';
+            content.innerHTML = `
+                <div class="chatbot-loading">
+                    <div class="chatbot-spinner"></div>
+                    챗봇을 로딩중입니다...
+                </div>
+            `;
+            
+            this.modal.appendChild(header);
+            this.modal.appendChild(content);
+            document.body.appendChild(this.overlay);
+            document.body.appendChild(this.modal);
+        }
+
+        bindEvents() {
+            // 트리거 버튼 클릭
+            this.triggerButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleModal();
+            });
+
+            // 오버레이 클릭으로 닫기
+            this.overlay.addEventListener('click', () => {
+                this.closeModal();
+            });
+
+            // 닫기 버튼 클릭
+            const closeButton = this.modal.querySelector('.chatbot-close');
+            closeButton.addEventListener('click', () => {
+                this.closeModal();
+            });
+
+            // ESC 키로 닫기
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.isOpen) {
+                    this.closeModal();
+                }
+            });
+
+            // 모달 내부 클릭 시 이벤트 전파 방지
+            this.modal.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        toggleModal() {
+            if (this.isOpen) {
+                this.closeModal();
+            } else {
+                this.openModal();
+            }
+        }
+
+        openModal() {
+            this.isOpen = true;
+            this.triggerButton.classList.add('open');
+            this.overlay.classList.add('open');
+            this.modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            
+            // iframe 로드 (처음 열 때만)
+            if (!this.iframe) {
+                this.loadChatbot();
+            }
+        }
+
+        closeModal() {
+            this.isOpen = false;
+            this.triggerButton.classList.remove('open');
+            this.overlay.classList.remove('open');
+            this.modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        loadChatbot() {
+            const content = this.modal.querySelector('.chatbot-content');
+            let isLoaded = false;
+            
+            // iframe 생성 및 로드
+            this.iframe = document.createElement('iframe');
+            this.iframe.className = 'chatbot-iframe';
+            this.iframe.src = this.config.chatbotUrl;
+            this.iframe.setAttribute('allow', 'microphone; camera');
+            this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');
+            
+            const showIframe = () => {
+                if (isLoaded) return;
+                isLoaded = true;
+                
+                const loading = content.querySelector('.chatbot-loading');
+                if (loading) {
+                    loading.style.opacity = '0';
+                    setTimeout(() => {
+                        if (loading.parentNode) {
+                            content.removeChild(loading);
+                        }
+                        content.appendChild(this.iframe);
+                        this.iframe.style.opacity = '0';
+                        setTimeout(() => {
+                            this.iframe.style.transition = 'opacity 0.3s ease';
+                            this.iframe.style.opacity = '1';
+                        }, 50);
+                    }, 300);
+                }
+            };
+            
+            // 로딩 완료 후 로딩 화면 제거
+            this.iframe.onload = () => {
+                console.log('iframe loaded successfully');
+                showIframe();
+            };
+
+            // 타임아웃으로 강제 로딩 완료 (5초 후)
+            setTimeout(() => {
+                if (!isLoaded) {
+                    console.log('Timeout reached, forcing iframe load');
+                    showIframe();
+                }
+            }, 5000);
+
+            // 에러 처리
+            this.iframe.onerror = () => {
+                content.innerHTML = `
+                    <div class="chatbot-loading">
+                        <div style="text-align: center; padding: 40px;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
+                            <div style="font-size: 16px; color: #666; margin-bottom: 8px;">챗봇을 로드할 수 없습니다</div>
+                            <div style="font-size: 14px; color: #999;">네트워크 연결을 확인해주세요</div>
+                        </div>
+                    </div>
+                `;
+            };
+        }
+
+        // 유틸리티 함수들
+        hexToRgba(hex, alpha) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+
+        darkenColor(hex, percent) {
+            const num = parseInt(hex.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+    }
+
+    // 전역 객체에 등록
+    window.ChatbotWidget = ChatbotWidget;
+
+    // 자동 초기화 (옵션이 제공되지 않은 경우)
+    if (!window.chatbotWidgetOptions) {
+        new ChatbotWidget();
+    }
+})();
+
+// 설정 옵션이 제공된 경우 초기화
+if (window.chatbotWidgetOptions) {
+    new window.ChatbotWidget(window.chatbotWidgetOptions);
+}
