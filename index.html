@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>챗봇 위젯 테스트</title>
+    <title>チャットボットウィジェットテスト</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -111,29 +111,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>🤖 챗봇 위젯 테스트 페이지</h1>
+        <h1>🤖 チャットボットウィジェットテストページ</h1>
         
         <div class="content">
-            <p>이 페이지는 챗봇 위젯의 동작을 테스트하기 위한 샘플 페이지입니다.</p>
-            <p>화면 오른쪽 하단에 챗봇 트리거 버튼이 표시되며, 클릭하면 모달이 슬라이드되어 나타납니다.</p>
+            <p>このページはチャットボットウィジェットの動作をテストするためのサンプルページです。</p>
+            <p>画面右下にチャットボットトリガーボタンが表示され、クリックするとモーダルがスライドして表示されます。</p>
+            <p><strong>💡 ヒント:</strong> トリガーボタン以外にも、下の「リンクトリガーテスト」セクションのボタンでもチャットボットを開くことができます！</p>
         </div>
 
         <div class="demo-section">
-            <h3>📋 기본 사용 방법</h3>
-            <p>다른 웹사이트에서 이 위젯을 사용하려면 다음 스크립트를 추가하세요:</p>
+            <h3>📋 基本的な使用方法</h3>
+            <p>他のウェブサイトでこのウィジェットを使用するには、次のスクリプトを追加してください：</p>
             <div class="code-block">
 &lt;script src="https://your-domain.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
             </div>
         </div>
 
         <div class="demo-section">
-            <h3>🎨 커스터마이징 옵션</h3>
-            <p>위젯의 제목, 색상, 위치 등을 커스터마이징할 수 있습니다:</p>
+            <h3>🎨 カスタマイズオプション</h3>
+            <p>ウィジェットのタイトル、色、位置などをカスタマイズできます：</p>
             <div class="config-example">
 &lt;script&gt;
-// 설정 옵션 정의
+// 設定オプション定義
 window.chatbotWidgetOptions = {
-    title: '💬 고객 지원',
+    title: '💬 カスタマーサポート',
     primaryColor: '#4299e1',
     secondaryColor: '#3182ce',
     position: 'right',
@@ -143,77 +144,106 @@ window.chatbotWidgetOptions = {
 &lt;script src="https://your-domain.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
             </div>
 
-            <h4>🔧 사용 가능한 옵션들:</h4>
+            <h4>🔧 利用可能なオプション：</h4>
             <div class="feature-list">
                 <div class="feature-item">
                     <strong>title</strong><br>
-                    <small>모달 헤더에 표시될 제목</small>
+                    <small>モーダルヘッダーに表示されるタイトル</small>
                 </div>
                 <div class="feature-item">
                     <strong>primaryColor</strong><br>
-                    <small>주 색상 (hex 코드)</small>
+                    <small>メインカラー（hexコード）</small>
                 </div>
                 <div class="feature-item">
                     <strong>secondaryColor</strong><br>
-                    <small>보조 색상 (hex 코드)</small>
+                    <small>サブカラー（hexコード）</small>
                 </div>
                 <div class="feature-item">
                     <strong>position</strong><br>
-                    <small>'left' 또는 'right'</small>
+                    <small>'left' または 'right'</small>
                 </div>
                 <div class="feature-item">
                     <strong>chatbotUrl</strong><br>
-                    <small>챗봇 iframe URL</small>
+                    <small>チャットボット iframe URL</small>
                 </div>
             </div>
         </div>
 
         <div class="demo-section">
-            <h3>🧪 실시간 테스트</h3>
-            <p>아래 버튼들을 클릭하여 다양한 설정으로 위젯을 테스트해보세요:</p>
+            <h3>🧪 リアルタイムテスト</h3>
+            <p>下のボタンをクリックして、様々な設定でウィジェットをテストしてみてください：</p>
             <div class="test-buttons">
-                <button class="test-btn orange" onclick="testOrangeTheme()">오렌지 테마</button>
-                <button class="test-btn secondary" onclick="testBlueTheme()">파란색 테마</button>
-                <button class="test-btn success" onclick="testGreenTheme()">초록색 테마</button>
-                <button class="test-btn purple" onclick="testPurpleTheme()">보라색 테마</button>
+                <button class="test-btn orange" onclick="testOrangeTheme()">オレンジテーマ</button>
+                <button class="test-btn secondary" onclick="testBlueTheme()">ブルーテーマ</button>
+                <button class="test-btn success" onclick="testGreenTheme()">グリーンテーマ</button>
+                <button class="test-btn purple" onclick="testPurpleTheme()">パープルテーマ</button>
             </div>
         </div>
 
         <div class="demo-section">
-            <h3>✨ 주요 개선사항</h3>
+            <h3>🔗 リンクトリガーテスト</h3>
+            <p>リンクやボタンクリックでチャットボットを開くことができます：</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h4 style="color: #333; margin-bottom: 15px;">📌 データ属性方式：</h4>
+                <div style="margin-bottom: 20px;">
+                    <a href="#" data-chatbot-trigger style="background: #ff6b35; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px; display: inline-block;">📞 お問い合わせ</a>
+                    <button data-chatbot-trigger style="background: #4299e1; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">💬 チャットボットを開く</button>
+                </div>
+                
+                <h4 style="color: #333; margin-bottom: 15px;">📌 CSSクラス方式：</h4>
+                <div>
+                    <a href="#" class="chatbot-trigger-link" style="background: #48bb78; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-right: 10px; display: inline-block;">🛠️ カスタマーサポート</a>
+                    <span class="chatbot-trigger-link" style="background: #9f7aea; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: inline-block;">❓ ヘルプ</span>
+                </div>
+            </div>
+            
+            <div class="config-example">
+&lt;!-- データ属性方式 --&gt;
+&lt;a href="#" data-chatbot-trigger&gt;お問い合わせ&lt;/a&gt;
+&lt;button data-chatbot-trigger&gt;チャットボットを開く&lt;/button&gt;
+
+&lt;!-- CSSクラス方式 --&gt;
+&lt;a href="#" class="chatbot-trigger-link"&gt;カスタマーサポート&lt;/a&gt;
+&lt;span class="chatbot-trigger-link"&gt;ヘルプ&lt;/span&gt;
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>✨ 主要な改善点</h3>
             <ul>
-                <li><strong>컴팩트한 헤더:</strong> 패딩과 높이를 최소화하여 더 많은 콘텐츠 공간 확보</li>
-                <li><strong>설정 가능한 옵션:</strong> 제목, 색상, 위치를 클라이언트에서 쉽게 커스터마이징</li>
-                <li><strong>반응형 디자인:</strong> 모든 디바이스에서 최적화된 경험</li>
-                <li><strong>부드러운 애니메이션:</strong> 현대적이고 세련된 사용자 경험</li>
-                <li><strong>접근성 지원:</strong> 키보드 네비게이션 및 스크린 리더 지원</li>
+                <li><strong>コンパクトなヘッダー：</strong> パディングと高さを最小化してより多くのコンテンツスペースを確保</li>
+                <li><strong>設定可能なオプション：</strong> タイトル、色、位置をクライアントで簡単にカスタマイズ</li>
+                <li><strong>レスポンシブデザイン：</strong> 全てのデバイスで最適化された体験</li>
+                <li><strong>スムーズなアニメーション：</strong> モダンで洗練されたユーザー体験</li>
+                <li><strong>アクセシビリティサポート：</strong> キーボードナビゲーションとスクリーンリーダーサポート</li>
             </ul>
         </div>
 
         <div style="height: 1000px; background: linear-gradient(to bottom, #f8f9fa, #e9ecef); margin: 40px -40px -40px -40px; padding: 40px; border-radius: 0 0 20px 20px;">
-            <h3>📜 스크롤 테스트 영역</h3>
-            <p>이 영역은 스크롤 테스트를 위한 긴 콘텐츠입니다. 스크롤을 내려도 챗봇 버튼이 고정 위치에 유지되는지 확인해보세요.</p>
+            <h3>📜 スクロールテストエリア</h3>
+            <p>このエリアはスクロールテスト用の長いコンテンツです。スクロールしてもチャットボットボタンが固定位置に保たれるか確認してみてください。</p>
             <div style="margin-top: 200px;">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <p>ここは日本語のサンプルテキストです。チャットボットウィジェットの動作をテストするためのコンテンツとして使用されています。</p>
             </div>
             <div style="margin-top: 200px;">
-                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>スクロール機能のテストを行っています。画面を下にスクロールしても、右下のチャットボットボタンが表示され続けることを確認してください。</p>
             </div>
             <div style="margin-top: 200px;">
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                <p>このウィジェットは様々なウェブサイトに簡単に組み込むことができる軽量なチャットボットソリューションです。</p>
             </div>
         </div>
     </div>
 
     <script>
-        // 테스트 함수들
+        // テスト関数
         function testBlueTheme() {
-            // 기존 위젯 제거
+            // 既存ウィジェット削除
             removeExistingWidget();
             
-            // 새로운 설정으로 위젯 생성
+            // 新しい設定でウィジェット作成
             new window.ChatbotWidget({
-                title: '💙 파란색 어시스턴트',
+                title: '💙 ブルーアシスタント',
                 primaryColor: '#4299e1',
                 secondaryColor: '#3182ce',
                 position: 'right'
@@ -223,7 +253,7 @@ window.chatbotWidgetOptions = {
         function testGreenTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '💚 초록색 도우미',
+                title: '💚 グリーンヘルパー',
                 primaryColor: '#48bb78',
                 secondaryColor: '#38a169',
                 position: 'right'
@@ -233,7 +263,7 @@ window.chatbotWidgetOptions = {
         function testOrangeTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '🧡 오렌지 챗봇',
+                title: '🧡 オレンジチャットボット',
                 primaryColor: '#ff6b35',
                 secondaryColor: '#f7931e',
                 position: 'right'
@@ -243,7 +273,7 @@ window.chatbotWidgetOptions = {
         function testPurpleTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '💜 보라색 챗봇',
+                title: '💜 パープルチャットボット',
                 primaryColor: '#9f7aea',
                 secondaryColor: '#805ad5',
                 position: 'right'
@@ -251,7 +281,7 @@ window.chatbotWidgetOptions = {
         }
 
         function removeExistingWidget() {
-            // 기존 위젯 요소들 제거
+            // 既存ウィジェット要素削除
             const existingTrigger = document.querySelector('.chatbot-trigger');
             const existingModal = document.querySelector('.chatbot-modal');
             const existingOverlay = document.querySelector('.chatbot-overlay');
@@ -262,17 +292,17 @@ window.chatbotWidgetOptions = {
         }
     </script>
 
-    <!-- 챗봇 위젯 스크립트 로드 -->
+    <!-- チャットボットウィジェットスクリプト読み込み -->
     <script>
-        // 개발 환경과 프로덕션 환경 구분
+        // 開発環境と本番環境の区別
         if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.port) {
-            // 개발 환경: 소스 파일 직접 로드
+            // 開発環境: ソースファイル直接読み込み
             const script = document.createElement('script');
             script.type = 'module';
             script.src = '/src/chatbot-widget.js';
             document.head.appendChild(script);
         } else {
-            // 프로덕션 환경: 빌드된 파일 로드
+            // 本番環境: ビルドされたファイル読み込み
             const script = document.createElement('script');
             script.src = '/chatbot-widget.iife.js';
             document.head.appendChild(script);
