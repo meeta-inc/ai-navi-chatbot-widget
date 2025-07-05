@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>배포된 위젯 테스트</title>
+    <title>デプロイされたウィジェットテスト</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -76,36 +76,51 @@
 </head>
 <body>
     <div class="container">
-        <h1>🚀 배포된 위젯 테스트</h1>
+        <h1>🚀 デプロイされたウィジェットテスト</h1>
         
         <div class="info">
-            <h3>📡 원격 위젯 테스트</h3>
-            <p>이 페이지는 Amplify에 배포된 위젯을 로컬에서 테스트하는 페이지입니다.</p>
+            <h3>📡 リモートウィジェットテスト</h3>
+            <p>このページはAmplifyにデプロイされたウィジェットをローカルでテストするページです。</p>
             
             <div class="code-block">
 &lt;script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
             </div>
             
             <div id="widget-status" class="status">
-                위젯 로딩 중...
+                ウィジェット読み込み中...
             </div>
         </div>
 
         <div class="info">
-            <h3>🎨 테마 테스트</h3>
-            <p>다양한 테마로 위젯을 테스트해보세요:</p>
+            <h3>🎨 テーマテスト</h3>
+            <p>様々なテーマでウィジェットをテストしてみてください：</p>
             
             <div class="test-buttons">
-                <button class="test-btn orange" onclick="testOrangeTheme()">🧡 오렌지</button>
-                <button class="test-btn blue" onclick="testBlueTheme()">💙 파란색</button>
-                <button class="test-btn green" onclick="testGreenTheme()">💚 초록색</button>
-                <button class="test-btn purple" onclick="testPurpleTheme()">💜 보라색</button>
+                <button class="test-btn orange" onclick="testOrangeTheme()">🧡 オレンジ</button>
+                <button class="test-btn blue" onclick="testBlueTheme()">💙 ブルー</button>
+                <button class="test-btn green" onclick="testGreenTheme()">💚 グリーン</button>
+                <button class="test-btn purple" onclick="testPurpleTheme()">💜 パープル</button>
             </div>
         </div>
 
         <div class="info">
-            <h3>📋 사용법</h3>
-            <p>다른 웹사이트에서 위젯을 사용하려면:</p>
+            <h3>🔗 リンクトリガーテスト</h3>
+            <p>リンクやボタンクリックでチャットボットを開くことができます：</p>
+            
+            <div style="margin: 20px 0; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                <p><strong>データ属性方式：</strong></p>
+                <a href="#" data-chatbot-trigger style="color: #ff6b35; text-decoration: underline; margin-right: 15px;">📞 お問い合わせ</a>
+                <button data-chatbot-trigger style="background: #4299e1; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">💬 チャットボットを開く</button>
+                
+                <p style="margin-top: 15px;"><strong>CSSクラス方式：</strong></p>
+                <a href="#" class="chatbot-trigger-link" style="color: #48bb78; text-decoration: underline; margin-right: 15px;">🛠️ カスタマーサポート</a>
+                <span class="chatbot-trigger-link" style="background: #9f7aea; color: white; padding: 8px 16px; border-radius: 4px; cursor: pointer;">❓ ヘルプ</span>
+            </div>
+        </div>
+
+        <div class="info">
+            <h3>📋 使用方法</h3>
+            <p>他のウェブサイトでウィジェットを使用するには：</p>
             <div class="code-block">
 &lt;script&gt;
 window.chatbotWidgetOptions = {
@@ -117,24 +132,35 @@ window.chatbotWidgetOptions = {
 &lt;/script&gt;
 &lt;script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"&gt;&lt;/script&gt;
             </div>
+            
+            <h4>リンクトリガー追加：</h4>
+            <div class="code-block">
+&lt;!-- データ属性方式 --&gt;
+&lt;a href="#" data-chatbot-trigger&gt;お問い合わせ&lt;/a&gt;
+&lt;button data-chatbot-trigger&gt;チャットボットを開く&lt;/button&gt;
+
+&lt;!-- CSSクラス方式 --&gt;
+&lt;a href="#" class="chatbot-trigger-link"&gt;カスタマーサポート&lt;/a&gt;
+&lt;span class="chatbot-trigger-link"&gt;ヘルプ&lt;/span&gt;
+            </div>
         </div>
     </div>
 
     <script>
-        // 위젯 로딩 상태 확인
+        // ウィジェット読み込み状態確認
         function checkWidgetStatus() {
             const statusDiv = document.getElementById('widget-status');
             
             if (window.ChatbotWidget) {
-                statusDiv.textContent = '✅ 위젯이 성공적으로 로드되었습니다!';
+                statusDiv.textContent = '✅ ウィジェットが正常に読み込まれました！';
                 statusDiv.className = 'status success';
             } else {
-                statusDiv.textContent = '❌ 위젯 로딩 실패 - 네트워크 연결을 확인하세요';
+                statusDiv.textContent = '❌ ウィジェット読み込み失敗 - ネットワーク接続を確認してください';
                 statusDiv.className = 'status error';
             }
         }
 
-        // 기존 위젯 제거 함수
+        // 既存ウィジェット削除関数
         function removeExistingWidget() {
             const existingTrigger = document.querySelector('.chatbot-trigger');
             const existingModal = document.querySelector('.chatbot-modal');
@@ -145,11 +171,11 @@ window.chatbotWidgetOptions = {
             if (existingOverlay) existingOverlay.remove();
         }
 
-        // 테마 테스트 함수들
+        // テーマテスト関数
         function testOrangeTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '🧡 오렌지 챗봇',
+                title: '🧡 オレンジチャットボット',
                 primaryColor: '#ff6b35',
                 secondaryColor: '#f7931e',
                 position: 'right'
@@ -159,7 +185,7 @@ window.chatbotWidgetOptions = {
         function testBlueTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '💙 파란색 어시스턴트',
+                title: '💙 ブルーアシスタント',
                 primaryColor: '#4299e1',
                 secondaryColor: '#3182ce',
                 position: 'right'
@@ -169,7 +195,7 @@ window.chatbotWidgetOptions = {
         function testGreenTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '💚 초록색 도우미',
+                title: '💚 グリーンヘルパー',
                 primaryColor: '#48bb78',
                 secondaryColor: '#38a169',
                 position: 'right'
@@ -179,18 +205,18 @@ window.chatbotWidgetOptions = {
         function testPurpleTheme() {
             removeExistingWidget();
             new window.ChatbotWidget({
-                title: '💜 보라색 챗봇',
+                title: '💜 パープルチャットボット',
                 primaryColor: '#9f7aea',
                 secondaryColor: '#805ad5',
                 position: 'right'
             });
         }
 
-        // 3초 후 위젯 상태 확인
+        // 3秒後にウィジェット状態確認
         setTimeout(checkWidgetStatus, 3000);
     </script>
 
-    <!-- 배포된 위젯 로드 -->
+    <!-- デプロイされたウィジェット読み込み -->
     <script src="https://develop.dwktomals1x32.amplifyapp.com/chatbot-widget.iife.js"></script>
 </body>
 </html>

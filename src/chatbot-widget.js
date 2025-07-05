@@ -15,6 +15,7 @@
                 secondaryColor: options.secondaryColor || '#f7931e',
                 chatbotUrl: options.chatbotUrl || 'https://develop.dqrr6detrv39g.amplifyapp.com/',
                 position: options.position || 'right', // 'left' or 'right'
+                showTriggerButton: options.showTriggerButton !== false, // 기본값은 true
                 ...options
             };
 
@@ -38,9 +39,14 @@
 
         createWidget() {
             this.createStyles();
-            this.createTriggerButton();
+            if (this.config.showTriggerButton) {
+                this.createTriggerButton();
+            }
             this.createModal();
             this.bindEvents();
+            
+            // iframe 미리 로드 시작
+            this.preloadIframe();
         }
 
         createStyles() {
@@ -329,7 +335,7 @@
             content.innerHTML = `
                 <div class="chatbot-loading">
                     <div class="chatbot-spinner"></div>
-                    챗봇을 로딩중입니다...
+                    チャットボットを読み込み中です...
                 </div>
             `;
             
@@ -340,11 +346,13 @@
         }
 
         bindEvents() {
-            // 트리거 버튼 클릭
-            this.triggerButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.toggleModal();
-            });
+            // 트리거 버튼 클릭 (버튼이 있을 때만)
+            if (this.triggerButton) {
+                this.triggerButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.toggleModal();
+                });
+            }
 
             // 오버레이 클릭으로 닫기
             this.overlay.addEventListener('click', () => {
@@ -368,6 +376,74 @@
             this.modal.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
+
+            // 링크 클릭으로 모달 열기
+            this.bindLinkTriggers();
+        }
+
+        preloadIframe() {
+            // 숨겨진 iframe을 미리 생성하여 로딩 시작
+            this.iframe = document.createElement('iframe');
+            this.iframe.className = 'chatbot-iframe';
+            this.iframe.src = this.config.chatbotUrl;
+            this.iframe.setAttribute('allow', 'microphone; camera');
+            this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');
+            this.iframe.style.display = 'none';
+            
+            // 미리 로드 완료 표시
+            this.iframe.onload = () => {
+                this.isIframePreloaded = true;
+            };
+            
+            // body에 숨겨진 상태로 추가하여 미리 로딩
+            document.body.appendChild(this.iframe);
+        }
+
+        bindLinkTriggers() {
+            // 기존 링크들에 이벤트 바인딩
+            this.attachLinkEvents();
+            
+            // DOM 변화 감지해서 새로운 링크들에도 자동 바인딩
+            this.linkObserver = new MutationObserver(() => {
+                this.attachLinkEvents();
+            });
+            
+            this.linkObserver.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        }
+
+        attachLinkEvents() {
+            // data-chatbot-trigger 속성을 가진 모든 요소
+            const triggers = document.querySelectorAll('[data-chatbot-trigger]');
+            
+            triggers.forEach(trigger => {
+                // 이미 이벤트가 바인딩된 요소는 스킵
+                if (trigger.hasAttribute('data-chatbot-bound')) return;
+                
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.openModal();
+                });
+                
+                // 바인딩 완료 표시
+                trigger.setAttribute('data-chatbot-bound', 'true');
+            });
+            
+            // 클래스 기반 트리거
+            const classTriggers = document.querySelectorAll('.chatbot-trigger-link');
+            
+            classTriggers.forEach(trigger => {
+                if (trigger.hasAttribute('data-chatbot-bound')) return;
+                
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.openModal();
+                });
+                
+                trigger.setAttribute('data-chatbot-bound', 'true');
+            });
         }
 
         toggleModal() {
@@ -380,35 +456,67 @@
 
         openModal() {
             this.isOpen = true;
-            this.triggerButton.classList.add('open');
+            if (this.triggerButton) {
+                this.triggerButton.classList.add('open');
+            }
             this.overlay.classList.add('open');
             this.modal.classList.add('open');
             document.body.style.overflow = 'hidden';
             
-            // iframe 로드 (처음 열 때만)
-            if (!this.iframe) {
+            // 미리 로드된 iframe 사용 또는 새로 로드
+            if (this.iframe && this.isIframePreloaded) {
+                this.showPreloadedIframe();
+            } else {
                 this.loadChatbot();
             }
         }
 
         closeModal() {
             this.isOpen = false;
-            this.triggerButton.classList.remove('open');
+            if (this.triggerButton) {
+                this.triggerButton.classList.remove('open');
+            }
             this.overlay.classList.remove('open');
             this.modal.classList.remove('open');
             document.body.style.overflow = '';
+        }
+
+        showPreloadedIframe() {
+            const content = this.modal.querySelector('.chatbot-content');
+            const loading = content.querySelector('.chatbot-loading');
+            
+            if (loading) {
+                loading.style.opacity = '0';
+                setTimeout(() => {
+                    if (loading.parentNode) {
+                        content.removeChild(loading);
+                    }
+                    
+                    // 미리 로드된 iframe을 모달에 이동
+                    this.iframe.style.display = 'block';
+                    this.iframe.style.opacity = '0';
+                    content.appendChild(this.iframe);
+                    
+                    setTimeout(() => {
+                        this.iframe.style.transition = 'opacity 0.3s ease';
+                        this.iframe.style.opacity = '1';
+                    }, 50);
+                }, 200);
+            }
         }
 
         loadChatbot() {
             const content = this.modal.querySelector('.chatbot-content');
             let isLoaded = false;
             
-            // iframe 생성 및 로드
-            this.iframe = document.createElement('iframe');
-            this.iframe.className = 'chatbot-iframe';
-            this.iframe.src = this.config.chatbotUrl;
-            this.iframe.setAttribute('allow', 'microphone; camera');
-            this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');
+            // iframe 생성 (아직 없는 경우만)
+            if (!this.iframe) {
+                this.iframe = document.createElement('iframe');
+                this.iframe.className = 'chatbot-iframe';
+                this.iframe.src = this.config.chatbotUrl;
+                this.iframe.setAttribute('allow', 'microphone; camera');
+                this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');
+            }
             
             const showIframe = () => {
                 if (isLoaded) return;
@@ -437,13 +545,12 @@
                 showIframe();
             };
 
-            // 타임아웃으로 강제 로딩 완료 (5초 후)
+            // 타임아웃으로 강제 로딩 완료 (3초 후)
             setTimeout(() => {
                 if (!isLoaded) {
-                    console.log('Timeout reached, forcing iframe load');
                     showIframe();
                 }
-            }, 5000);
+            }, 3000);
 
             // 에러 처리
             this.iframe.onerror = () => {
@@ -451,8 +558,8 @@
                     <div class="chatbot-loading">
                         <div style="text-align: center; padding: 40px;">
                             <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
-                            <div style="font-size: 16px; color: #666; margin-bottom: 8px;">챗봇을 로드할 수 없습니다</div>
-                            <div style="font-size: 14px; color: #999;">네트워크 연결을 확인해주세요</div>
+                            <div style="font-size: 16px; color: #666; margin-bottom: 8px;">チャットボットを読み込めません</div>
+                            <div style="font-size: 14px; color: #999;">ネットワーク接続を確認してください</div>
                         </div>
                     </div>
                 `;
@@ -482,13 +589,25 @@
     // 전역 객체에 등록
     window.ChatbotWidget = ChatbotWidget;
 
-    // 자동 초기화 (옵션이 제공되지 않은 경우)
-    if (!window.chatbotWidgetOptions) {
-        new ChatbotWidget();
+    // 자동 초기화 
+    // DOM이 완전히 로드된 후 초기화하여 window.chatbotWidgetOptions를 확인
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.chatbotWidgetInstance) {
+                if (window.chatbotWidgetOptions) {
+                    window.chatbotWidgetInstance = new ChatbotWidget(window.chatbotWidgetOptions);
+                } else {
+                    window.chatbotWidgetInstance = new ChatbotWidget();
+                }
+            }
+        });
+    } else {
+        if (!window.chatbotWidgetInstance) {
+            if (window.chatbotWidgetOptions) {
+                window.chatbotWidgetInstance = new ChatbotWidget(window.chatbotWidgetOptions);
+            } else {
+                window.chatbotWidgetInstance = new ChatbotWidget();
+            }
+        }
     }
 })();
-
-// 설정 옵션이 제공된 경우 초기화
-if (window.chatbotWidgetOptions) {
-    new window.ChatbotWidget(window.chatbotWidgetOptions);
-}
