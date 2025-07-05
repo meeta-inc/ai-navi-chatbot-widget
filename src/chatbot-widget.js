@@ -2,7 +2,7 @@
     'use strict';
 
     // 위젯이 이미 로드되었는지 확인
-    if (window.ChatbotWidget && window.chatbotWidgetInstance) {
+    if (window.ChatbotWidget) {
         return;
     }
 
@@ -404,11 +404,11 @@
             this.attachLinkEvents();
             
             // DOM 변화 감지해서 새로운 링크들에도 자동 바인딩
-            const observer = new MutationObserver(() => {
+            this.linkObserver = new MutationObserver(() => {
                 this.attachLinkEvents();
             });
             
-            observer.observe(document.body, {
+            this.linkObserver.observe(document.body, {
                 childList: true,
                 subtree: true
             });
