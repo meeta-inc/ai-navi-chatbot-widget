@@ -118,7 +118,7 @@
                     position: fixed;
                     top: 5%;
                     ${this.config.position === 'left' ? 'left' : 'right'}: 0;
-                    width: 50%;
+                    width: 30%;
                     height: 90%;
                     background: white;
                     border-radius: 0;
