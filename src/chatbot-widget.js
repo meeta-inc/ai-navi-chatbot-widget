@@ -107,7 +107,6 @@
                     opacity: 0;
                     visibility: hidden;
                     transition: all 0.3s ease;
-                    backdrop-filter: blur(8px);
                 }
 
                 .chatbot-overlay.open {
@@ -122,7 +121,7 @@
                     width: 50%;
                     height: 90%;
                     background: white;
-                    border-radius: ${this.config.position === 'left' ? '0 20px 20px 0' : '20px 0 0 20px'};
+                    border-radius: 0;
                     box-shadow: ${this.config.position === 'left' ? '10px' : '-10px'} 0 50px rgba(0, 0, 0, 0.3);
                     z-index: 10000;
                     transform: translateX(${this.config.position === 'left' ? '-100%' : '100%'});
@@ -137,8 +136,9 @@
                 }
 
                 .chatbot-header {
-                    background: linear-gradient(135deg, ${this.config.primaryColor} 0%, ${this.config.secondaryColor} 100%);
-                    color: white;
+                    background: white;
+                    color: #333;
+                    border-bottom: 1px solid #e0e0e0;
                     padding: 8px 16px;
                     display: flex;
                     align-items: center;
@@ -156,50 +156,44 @@
                 }
 
                 .chatbot-close {
-                    background: rgba(0, 0, 0, 0.15);
-                    border: 1px solid rgba(255, 255, 255, 0.3);
-                    color: white;
+                    background: none;
+                    border: none;
+                    color: #B7B7B7;
                     cursor: pointer;
-                    padding: 6px;
-                    border-radius: 50%;
+                    padding: 0;
+                    border-radius: 0;
                     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    min-width: 30px;
-                    min-height: 30px;
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
                     opacity: 1;
-                    backdrop-filter: blur(8px);
-                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 }
 
                 .chatbot-close:hover {
-                    background: rgba(0, 0, 0, 0.25);
-                    border-color: rgba(255, 255, 255, 0.5);
+                    color: #999;
                     transform: scale(1.05);
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                 }
 
                 .chatbot-close:active {
                     transform: scale(0.95);
-                    background: rgba(0, 0, 0, 0.35);
+                    color: #666;
                 }
 
                 .chatbot-close-icon {
-                    width: 16px;
-                    height: 16px;
-                    fill: none;
-                    stroke: currentColor;
-                    stroke-width: 2.5px;
-                    stroke-linecap: round;
-                    stroke-linejoin: round;
-                    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+                    width: 24px;
+                    height: 24px;
+                    fill: currentColor;
+                    stroke: none;
+                    flex-shrink: 0;
                 }
 
                 .chatbot-content {
                     flex: 1;
                     overflow: hidden;
-                    border-radius: 0 0 ${this.config.position === 'left' ? '20px 0' : '0 20px'};
+                    border-radius: 0;
                 }
 
                 .chatbot-iframe {
@@ -207,7 +201,7 @@
                     height: 100%;
                     border: none;
                     background: #f8f9fa;
-                    border-radius: 0 0 ${this.config.position === 'left' ? '20px 0' : '0 20px'};
+                    border-radius: 0;
                 }
 
                 .chatbot-loading {
@@ -240,7 +234,7 @@
                         width: 100%;
                         top: 10%;
                         height: 90%;
-                        border-radius: 20px 20px 0 0;
+                        border-radius: 0;
                         ${this.config.position}: 0;
                         transform: translateY(100%);
                     }
@@ -322,9 +316,8 @@
             header.innerHTML = `
                 <h3 class="chatbot-title">${this.config.title}</h3>
                 <button class="chatbot-close" aria-label="챗봇 닫기" title="챗봇 닫기">
-                    <svg class="chatbot-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    <svg class="chatbot-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4.99422 3.90637C4.73832 3.90637 4.47072 3.99238 4.27542 4.18738C3.88492 4.57838 3.88492 5.23437 4.27542 5.62537L10.5567 11.9064L4.27542 18.1874C3.88492 18.5784 3.88492 19.2344 4.27542 19.6254C4.66602 20.0154 5.32242 20.0154 5.71302 19.6254L11.9942 13.3444L18.2754 19.6254C18.666 20.0154 19.3224 20.0154 19.713 19.6254C20.1035 19.2344 20.1035 18.5784 19.713 18.1874L13.4317 11.9064L19.713 5.62537C20.1035 5.23437 20.1035 4.57838 19.713 4.18738C19.5177 3.99238 19.25 3.90637 18.9942 3.90637C18.7383 3.90637 18.4708 3.99238 18.2754 4.18738L11.9942 10.4684L5.71302 4.18738C5.51772 3.99238 5.25012 3.90637 4.99422 3.90637Z" fill="currentColor"/>
                     </svg>
                 </button>
             `;
