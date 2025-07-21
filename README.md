@@ -50,7 +50,7 @@ window.chatbotWidgetOptions = {
 | `title` | string | '🤖 AI 어시스턴트' | 헤더에 표시될 위젯 제목 |
 | `primaryColor` | string | '#ff6b35' | 그라데이션 주 색상 |
 | `secondaryColor` | string | '#f7931e' | 그라데이션 보조 색상 |
-| `chatbotUrl` | string | 'https://develop.dqrr6detrv39g.amplifyapp.com/' | 챗봇 애플리케이션 URL |
+| `chatbotUrl` | string | 'https://ainavi-dev.meeta.jp/' | 챗봇 애플리케이션 URL |
 | `position` | string | 'right' | 트리거 버튼 위치 ('left' 또는 'right') |
 | `showTriggerButton` | boolean | true | 플로팅 트리거 버튼 표시/숨김 |
 

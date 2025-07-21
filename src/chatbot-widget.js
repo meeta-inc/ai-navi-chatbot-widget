@@ -13,7 +13,7 @@
                 title: options.title || '🤖 AI Navi',
                 primaryColor: options.primaryColor || '#ff6b35',
                 secondaryColor: options.secondaryColor || '#f7931e',
-                chatbotUrl: options.chatbotUrl || 'https://develop.dqrr6detrv39g.amplifyapp.com/',
+                chatbotUrl: options.chatbotUrl || 'https://ainavi-dev.meeta.jp/',
                 position: options.position || 'right', // 'left' or 'right'
                 showTriggerButton: options.showTriggerButton !== false, // 기본값은 true
                 ...options
