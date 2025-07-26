@@ -116,10 +116,11 @@
 
                 .chatbot-modal {
                     position: fixed;
-                    top: 5%;
+                    top: 0;
+                    bottom: 0;
                     ${this.config.position === 'left' ? 'left' : 'right'}: 0;
                     width: 30%;
-                    height: 90%;
+                    height: 100%;
                     background: white;
                     border-radius: 0;
                     box-shadow: ${this.config.position === 'left' ? '10px' : '-10px'} 0 50px rgba(0, 0, 0, 0.3);
