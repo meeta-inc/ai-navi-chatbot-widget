@@ -119,7 +119,7 @@
                     top: 0;
                     bottom: 0;
                     ${this.config.position === 'left' ? 'left' : 'right'}: 0;
-                    width: 30%;
+                    width: 500px;
                     height: 100%;
                     background: white;
                     border-radius: 0;
