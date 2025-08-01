@@ -12,6 +12,30 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
+        .dev-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 20px;
+            background: #1a202c;
+            color: #fff;
+            border: 2px solid #2d3748;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 9997;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .dev-button:hover {
+            background: #2d3748;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .dev-button:active {
+            transform: translateY(0);
+        }
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -110,6 +134,11 @@
     </style>
 </head>
 <body>
+    <!-- 開発者検証用ボタン -->
+    <button class="dev-button" onclick="openDev2Chatbot()">
+        🔧 dev2 : 開発者検証用
+    </button>
+
     <div class="container">
         <h1>🤖 チャットボットウィジェットテストページ</h1>
         
@@ -236,6 +265,25 @@ window.chatbotWidgetOptions = {
     </div>
 
     <script>
+        // 開発者検証用チャットボットを開く関数
+        function openDev2Chatbot() {
+            removeExistingWidget();
+            new window.ChatbotWidget({
+                title: '🔧 開発者検証用チャットボット',
+                primaryColor: '#1a202c',
+                secondaryColor: '#2d3748',
+                position: 'right',
+                chatbotUrl: 'https://dev2.dy4dah5zzytzy.amplifyapp.com/'
+            });
+            // ウィジェットを作成後、すぐに開く
+            setTimeout(() => {
+                const widget = window.chatbotWidget;
+                if (widget && widget.openModal) {
+                    widget.openModal();
+                }
+            }, 100);
+        }
+
         // テスト関数
         function testBlueTheme() {
             // 既存ウィジェット削除

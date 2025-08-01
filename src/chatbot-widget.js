@@ -102,15 +102,15 @@
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background: rgba(0, 0, 0, 0.7);
+                    background: transparent; /* 투명 배경으로 변경 */
                     z-index: 9999;
-                    opacity: 0;
+                    opacity: 1; /* 항상 투명하게 유지 */
                     visibility: hidden;
-                    transition: all 0.3s ease;
+                    transition: visibility 0.3s ease;
+                    pointer-events: none; /* 클릭 이벤트 차단 */
                 }
 
                 .chatbot-overlay.open {
-                    opacity: 1;
                     visibility: visible;
                 }
 
@@ -124,12 +124,13 @@
                     background: white;
                     border-radius: 0;
                     box-shadow: ${this.config.position === 'left' ? '10px' : '-10px'} 0 50px rgba(0, 0, 0, 0.3);
-                    z-index: 10000;
+                    z-index: 10001; /* z-index 최적화 */
                     transform: translateX(${this.config.position === 'left' ? '-100%' : '100%'});
                     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
                     display: flex;
                     flex-direction: column;
                     overflow: hidden;
+                    pointer-events: auto; /* 모달은 클릭 가능 */
                 }
 
                 .chatbot-modal.open {
@@ -348,10 +349,10 @@
                 });
             }
 
-            // 오버레이 클릭으로 닫기
-            this.overlay.addEventListener('click', () => {
-                this.closeModal();
-            });
+            // 오버레이 클릭으로 닫기 - 제거됨
+            // this.overlay.addEventListener('click', () => {
+            //     this.closeModal();
+            // });
 
             // 닫기 버튼 클릭
             const closeButton = this.modal.querySelector('.chatbot-close');
@@ -359,12 +360,12 @@
                 this.closeModal();
             });
 
-            // ESC 키로 닫기
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && this.isOpen) {
-                    this.closeModal();
-                }
-            });
+            // ESC 키로 닫기 - 제거됨 (닫기 버튼만 사용)
+            // document.addEventListener('keydown', (e) => {
+            //     if (e.key === 'Escape' && this.isOpen) {
+            //         this.closeModal();
+            //     }
+            // });
 
             // 모달 내부 클릭 시 이벤트 전파 방지
             this.modal.addEventListener('click', (e) => {
@@ -455,7 +456,7 @@
             }
             this.overlay.classList.add('open');
             this.modal.classList.add('open');
-            document.body.style.overflow = 'hidden';
+            // document.body.style.overflow = 'hidden'; // Body 스크롤 잠금 제거
             
             // 미리 로드된 iframe 사용 또는 새로 로드
             if (this.iframe && this.isIframePreloaded) {
@@ -472,7 +473,7 @@
             }
             this.overlay.classList.remove('open');
             this.modal.classList.remove('open');
-            document.body.style.overflow = '';
+            // document.body.style.overflow = ''; // Body 스크롤 잠금 해제 제거
         }
 
         showPreloadedIframe() {
