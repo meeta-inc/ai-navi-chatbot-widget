@@ -24,8 +24,19 @@
             this.modal = null;
             this.overlay = null;
             this.iframe = null;
+            this.isMobile = this.checkMobile(); // 모바일 환경 체크
             
             this.init();
+        }
+
+        // 모바일 환경 감지
+        checkMobile() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            // 스마트폰 감지 (태블릿 제외)
+            const isSmartphone = /iPhone|iPod|Android.*Mobile/i.test(userAgent);
+            // 화면 크기로도 체크 (스마트폰 기준)
+            const isSmallScreen = window.innerWidth <= 480;
+            return isSmartphone || isSmallScreen;
         }
 
         init() {
@@ -73,6 +84,28 @@
                     align-items: center;
                     justify-content: center;
                     overflow: hidden;
+                }
+
+                /* 모바일 스마트폰용 트리거 버튼 스타일 */
+                .chatbot-trigger.mobile-trigger {
+                    width: 80px;
+                    height: 80px;
+                    gap: 8px;
+                    border-radius: 100px;
+                    background: #F97316;
+                    box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.25);
+                }
+
+                .chatbot-trigger.mobile-trigger:hover {
+                    transform: none;
+                    box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.25);
+                    background: #F97316;
+                }
+
+                .chatbot-trigger.mobile-trigger .chatbot-trigger-icon {
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
                 }
 
                 .chatbot-trigger:hover {
@@ -288,17 +321,29 @@
 
         createTriggerButton() {
             this.triggerButton = document.createElement('button');
-            this.triggerButton.className = 'chatbot-trigger';
-            this.triggerButton.innerHTML = `
-                <svg class="chatbot-trigger-icon" viewBox="0 0 24 24" fill="white" stroke="none">
-                    <path d="M18 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>
-                    <path d="M4 18h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2H4"/>
-                    <rect x="6" y="6" width="12" height="12" rx="2" fill="white"/>
-                    <circle cx="9" cy="10" r="1" fill="#ff6b35"/>
-                    <circle cx="15" cy="10" r="1" fill="#ff6b35"/>
-                    <rect x="10" y="13" width="4" height="1" rx="0.5" fill="#ff6b35"/>
-                </svg>
-            `;
+            this.triggerButton.className = this.isMobile ? 'chatbot-trigger mobile-trigger' : 'chatbot-trigger';
+            
+            // 모바일용 새로운 아이콘
+            if (this.isMobile) {
+                this.triggerButton.innerHTML = `
+                    <svg class="chatbot-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                `;
+            } else {
+                // 기존 PC용 아이콘
+                this.triggerButton.innerHTML = `
+                    <svg class="chatbot-trigger-icon" viewBox="0 0 24 24" fill="white" stroke="none">
+                        <path d="M18 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>
+                        <path d="M4 18h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2H4"/>
+                        <rect x="6" y="6" width="12" height="12" rx="2" fill="white"/>
+                        <circle cx="9" cy="10" r="1" fill="#ff6b35"/>
+                        <circle cx="15" cy="10" r="1" fill="#ff6b35"/>
+                        <rect x="10" y="13" width="4" height="1" rx="0.5" fill="#ff6b35"/>
+                    </svg>
+                `;
+            }
+            
             this.triggerButton.setAttribute('aria-label', '챗봇 열기');
             document.body.appendChild(this.triggerButton);
         }
