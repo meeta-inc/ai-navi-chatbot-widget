@@ -67,33 +67,53 @@
                     box-sizing: border-box;
                 }
 
+                /* PC용 트리거 버튼 - Figma 디자인 */
                 .chatbot-trigger {
                     position: fixed;
                     bottom: 24px;
                     ${this.config.position}: 24px;
-                    width: 64px;
-                    height: 64px;
-                    background: linear-gradient(135deg, ${this.config.primaryColor} 0%, ${this.config.secondaryColor} 100%);
+                    display: inline-flex;
+                    height: 60px;
+                    align-items: center;
+                    gap: 12px;
+                    padding: 0 24px;
+                    flex-shrink: 0;
+                    box-shadow: 1.5px 3px 3px 0 rgba(0, 0, 0, 0.25);
+                    border-radius: 22.5px;
+                    background: var(--Navi_Orange_Main, #F57C00);
                     border: none;
-                    border-radius: 50%;
                     cursor: pointer;
                     z-index: 9998;
-                    box-shadow: 0 8px 32px ${this.hexToRgba(this.config.primaryColor, 0.4)};
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
                     overflow: hidden;
+                    font-family: "Noto Sans", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                }
+                
+                /* PC 트리거 버튼 텍스트 */
+                .chatbot-trigger-text {
+                    color: #FFF;
+                    font-size: 21px;
+                    font-style: normal;
+                    font-weight: 600;
+                    line-height: 30px;
+                    letter-spacing: 0.6px;
+                    white-space: nowrap;
                 }
 
                 /* 모바일 스마트폰용 트리거 버튼 스타일 */
                 .chatbot-trigger.mobile-trigger {
                     width: 80px;
                     height: 80px;
+                    padding: 0;
                     gap: 8px;
                     border-radius: 100px;
                     background: #F97316;
                     box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.25);
+                    justify-content: center;
+                }
+                
+                .chatbot-trigger.mobile-trigger .chatbot-trigger-text {
+                    display: none;
                 }
 
                 .chatbot-trigger.mobile-trigger:hover {
@@ -109,9 +129,9 @@
                 }
 
                 .chatbot-trigger:hover {
-                    transform: scale(1.1);
-                    box-shadow: 0 12px 40px ${this.hexToRgba(this.config.primaryColor, 0.6)};
-                    background: linear-gradient(135deg, ${this.darkenColor(this.config.primaryColor, 10)} 0%, ${this.darkenColor(this.config.secondaryColor, 10)} 100%);
+                    transform: translateY(-2px);
+                    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+                    background: #E65100;
                 }
 
                 .chatbot-trigger:active {
@@ -119,9 +139,9 @@
                 }
 
                 .chatbot-trigger-icon {
-                    width: 28px;
-                    height: 28px;
-                    fill: white;
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
                     transition: transform 0.3s ease;
                 }
 
@@ -323,7 +343,7 @@
             this.triggerButton = document.createElement('button');
             this.triggerButton.className = this.isMobile ? 'chatbot-trigger mobile-trigger' : 'chatbot-trigger';
             
-            // 모바일용 새로운 아이콘
+            // 모바일용 아이콘
             if (this.isMobile) {
                 this.triggerButton.innerHTML = `
                     <svg class="chatbot-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -331,16 +351,24 @@
                     </svg>
                 `;
             } else {
-                // 기존 PC용 아이콘
+                // PC용 Figma 디자인 아이콘 + 텍스트
                 this.triggerButton.innerHTML = `
-                    <svg class="chatbot-trigger-icon" viewBox="0 0 24 24" fill="white" stroke="none">
-                        <path d="M18 8h2a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>
-                        <path d="M4 18h2a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2H4"/>
-                        <rect x="6" y="6" width="12" height="12" rx="2" fill="white"/>
-                        <circle cx="9" cy="10" r="1" fill="#ff6b35"/>
-                        <circle cx="15" cy="10" r="1" fill="#ff6b35"/>
-                        <rect x="10" y="13" width="4" height="1" rx="0.5" fill="#ff6b35"/>
+                    <svg class="chatbot-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                        <g clip-path="url(#clip0_870_3324)">
+                            <path d="M12.4995 1.17432C12.9551 1.17432 13.3246 1.54394 13.3247 1.99951V4.99951C13.3247 5.45515 12.9551 5.82471 12.4995 5.82471C12.0441 5.82446 11.6743 5.45499 11.6743 4.99951V2.82471H8.49951C8.04409 2.82446 7.67432 2.45499 7.67432 1.99951C7.67439 1.54409 8.04413 1.17456 8.49951 1.17432H12.4995Z" fill="white"/>
+                            <path d="M18.5 5.25C19.2293 5.25 19.9286 5.53994 20.4443 6.05566C20.9601 6.57139 21.25 7.27065 21.25 8V16C21.25 16.7293 20.9601 17.4286 20.4443 17.9443C19.9286 18.4601 19.2293 18.75 18.5 18.75H8.81055L5.03027 22.5303C4.81579 22.7448 4.49313 22.8094 4.21289 22.6934C3.93263 22.5773 3.75 22.3033 3.75 22V8C3.75 7.27065 4.03994 6.57139 4.55566 6.05566C5.07139 5.53994 5.77065 5.25 6.5 5.25H18.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3.5 11.4375C3.81066 11.4375 4.0625 11.6893 4.0625 12C4.0625 12.3107 3.81066 12.5625 3.5 12.5625H1.5C1.18934 12.5625 0.9375 12.3107 0.9375 12C0.9375 11.6893 1.18934 11.4375 1.5 11.4375H3.5Z" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8.9375 13V11C8.9375 10.6893 9.18934 10.4375 9.5 10.4375C9.81066 10.4375 10.0625 10.6893 10.0625 11V13C10.0625 13.3107 9.81066 13.5625 9.5 13.5625C9.18934 13.5625 8.9375 13.3107 8.9375 13Z" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M14.9375 13V11C14.9375 10.6893 15.1893 10.4375 15.5 10.4375C15.8107 10.4375 16.0625 10.6893 16.0625 11V13C16.0625 13.3107 15.8107 13.5625 15.5 13.5625C15.1893 13.5625 14.9375 13.3107 14.9375 13Z" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M23.5 11.4375L23.6133 11.4492C23.8696 11.5017 24.0625 11.7282 24.0625 12C24.0625 12.2718 23.8696 12.4983 23.6133 12.5508L23.5 12.5625H21.5C21.1893 12.5625 20.9375 12.3107 20.9375 12C20.9375 11.6893 21.1893 11.4375 21.5 11.4375H23.5Z" stroke="white" stroke-width="1.125" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_870_3324">
+                                <rect width="24" height="24" fill="white" transform="translate(0.5)"/>
+                            </clipPath>
+                        </defs>
                     </svg>
+                    <span class="chatbot-trigger-text">AIチャットサポート</span>
                 `;
             }
             
