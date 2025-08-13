@@ -1,21 +1,23 @@
 (function () {
     'use strict';
 
-    // 위젯이 이미 로드되었는지 확인
+    // ウィジェットが既にロードされているか確認
     if (window.ChatbotWidget) {
         return;
     }
 
     class ChatbotWidget {
         constructor(options = {}) {
-            // 기본 설정
+            // デフォルト設定
             this.config = {
                 title: options.title || '🤖 AI Navi',
                 primaryColor: options.primaryColor || '#ff6b35',
                 secondaryColor: options.secondaryColor || '#f7931e',
                 chatbotUrl: options.chatbotUrl || 'https://ainavi-dev.meeta.jp/',
                 position: options.position || 'right', // 'left' or 'right'
-                showTriggerButton: options.showTriggerButton !== false, // 기본값은 true
+                showTriggerButton: options.showTriggerButton !== false, // デフォルトはtrue
+                clientId: options.clientId || 'RS000001', // クライアントID
+                appId: options.appId || '0001', // アプリID
                 ...options
             };
 
@@ -24,23 +26,23 @@
             this.modal = null;
             this.overlay = null;
             this.iframe = null;
-            this.isMobile = this.checkMobile(); // 모바일 환경 체크
+            this.isMobile = this.checkMobile(); // モバイル環境チェック
 
             this.init();
         }
 
-        // 모바일 환경 감지
+        // モバイル環境検出
         checkMobile() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            // 스마트폰 감지 (태블릿 제외)
+            // スマートフォン検出（タブレット除外）
             const isSmartphone = /iPhone|iPod|Android.*Mobile/i.test(userAgent);
-            // 화면 크기로도 체크 (스마트폰 기준)
+            // 画面サイズでもチェック（スマートフォン基準）
             const isSmallScreen = window.innerWidth <= 480;
             return isSmartphone || isSmallScreen;
         }
 
         init() {
-            // DOM이 로드된 후 위젯 생성
+            // DOMがロードされた後にウィジェット作成
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', () => this.createWidget());
             } else {
@@ -56,7 +58,7 @@
             this.createModal();
             this.bindEvents();
 
-            // iframe 미리 로드 시작
+            // iframe事前ロード開始
             this.preloadIframe();
         }
 
@@ -343,7 +345,7 @@
             this.triggerButton = document.createElement('button');
             this.triggerButton.className = this.isMobile ? 'chatbot-trigger mobile-trigger' : 'chatbot-trigger';
 
-            // 모바일용 아이콘
+            // モバイル用アイコン
             if (this.isMobile) {
                 this.triggerButton.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
@@ -356,7 +358,7 @@
                      </svg>
                 `;
             } else {
-                // PC용 Figma 디자인 아이콘 + 텍스트
+                // PC用Figmaデザインアイコン + テキスト
                 this.triggerButton.innerHTML = `
                     <svg class="chatbot-trigger-icon" xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
                         <g clip-path="url(#clip0_870_3324)">
@@ -377,32 +379,32 @@
                 `;
             }
 
-            this.triggerButton.setAttribute('aria-label', '챗봇 열기');
+            this.triggerButton.setAttribute('aria-label', 'チャットボットを開く');
             document.body.appendChild(this.triggerButton);
         }
 
         createModal() {
-            // 오버레이 생성
+            // オーバーレイ作成
             this.overlay = document.createElement('div');
             this.overlay.className = 'chatbot-overlay';
 
-            // 모달 생성
+            // モーダル作成
             this.modal = document.createElement('div');
             this.modal.className = 'chatbot-modal';
 
-            // 헤더 생성
+            // ヘッダー作成
             const header = document.createElement('div');
             header.className = 'chatbot-header';
             header.innerHTML = `
                 <h3 class="chatbot-title">${this.config.title}</h3>
-                <button class="chatbot-close" aria-label="챗봇 닫기" title="챗봇 닫기">
+                <button class="chatbot-close" aria-label="チャットボットを閉じる" title="チャットボットを閉じる">
                     <svg class="chatbot-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M4.99422 3.90637C4.73832 3.90637 4.47072 3.99238 4.27542 4.18738C3.88492 4.57838 3.88492 5.23437 4.27542 5.62537L10.5567 11.9064L4.27542 18.1874C3.88492 18.5784 3.88492 19.2344 4.27542 19.6254C4.66602 20.0154 5.32242 20.0154 5.71302 19.6254L11.9942 13.3444L18.2754 19.6254C18.666 20.0154 19.3224 20.0154 19.713 19.6254C20.1035 19.2344 20.1035 18.5784 19.713 18.1874L13.4317 11.9064L19.713 5.62537C20.1035 5.23437 20.1035 4.57838 19.713 4.18738C19.5177 3.99238 19.25 3.90637 18.9942 3.90637C18.7383 3.90637 18.4708 3.99238 18.2754 4.18738L11.9942 10.4684L5.71302 4.18738C5.51772 3.99238 5.25012 3.90637 4.99422 3.90637Z" fill="currentColor"/>
                     </svg>
                 </button>
             `;
 
-            // 콘텐츠 영역 생성
+            // コンテンツエリア作成
             const content = document.createElement('div');
             content.className = 'chatbot-content';
             content.innerHTML = `
@@ -419,7 +421,7 @@
         }
 
         bindEvents() {
-            // 트리거 버튼 클릭 (버튼이 있을 때만)
+            // トリガーボタンクリック（ボタンがある場合のみ）
             if (this.triggerButton) {
                 this.triggerButton.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -427,56 +429,61 @@
                 });
             }
 
-            // 오버레이 클릭으로 닫기 - 제거됨
+            // オーバーレイクリックで閉じる - 削除済み
             // this.overlay.addEventListener('click', () => {
             //     this.closeModal();
             // });
 
-            // 닫기 버튼 클릭
+            // 閉じるボタンクリック
             const closeButton = this.modal.querySelector('.chatbot-close');
             closeButton.addEventListener('click', () => {
                 this.closeModal();
             });
 
-            // ESC 키로 닫기 - 제거됨 (닫기 버튼만 사용)
+            // ESCキーで閉じる - 削除済み（閉じるボタンのみ使用）
             // document.addEventListener('keydown', (e) => {
             //     if (e.key === 'Escape' && this.isOpen) {
             //         this.closeModal();
             //     }
             // });
 
-            // 모달 내부 클릭 시 이벤트 전파 방지
+            // モーダル内部クリック時のイベント伝播防止
             this.modal.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
 
-            // 링크 클릭으로 모달 열기
+            // リンククリックでモーダルを開く
             this.bindLinkTriggers();
         }
 
         preloadIframe() {
-            // 숨겨진 iframe을 미리 생성하여 로딩 시작
+            // URLにクエリパラメータを追加
+            const url = new URL(this.config.chatbotUrl);
+            url.searchParams.set('clientId', this.config.clientId);
+            url.searchParams.set('appId', this.config.appId);
+            
+            // 隠しiframeを事前に作成してロード開始
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'chatbot-iframe';
-            this.iframe.src = this.config.chatbotUrl;
+            this.iframe.src = url.toString();
             this.iframe.setAttribute('allow', 'microphone; camera');
             this.iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox');
             this.iframe.style.display = 'none';
 
-            // 미리 로드 완료 표시
+            // 事前ロード完了表示
             this.iframe.onload = () => {
                 this.isIframePreloaded = true;
             };
 
-            // body에 숨겨진 상태로 추가하여 미리 로딩
+            // bodyに隠した状態で追加して事前ロード
             document.body.appendChild(this.iframe);
         }
 
         bindLinkTriggers() {
-            // 기존 링크들에 이벤트 바인딩
+            // 既存リンクにイベントバインディング
             this.attachLinkEvents();
 
-            // DOM 변화 감지해서 새로운 링크들에도 자동 바인딩
+            // DOM変更を検出して新しいリンクにも自動バインディング
             this.linkObserver = new MutationObserver(() => {
                 this.attachLinkEvents();
             });
@@ -488,11 +495,11 @@
         }
 
         attachLinkEvents() {
-            // data-chatbot-trigger 속성을 가진 모든 요소
+            // data-chatbot-trigger属性を持つすべての要素
             const triggers = document.querySelectorAll('[data-chatbot-trigger]');
 
             triggers.forEach(trigger => {
-                // 이미 이벤트가 바인딩된 요소는 스킵
+                // 既にイベントがバインディングされた要素はスキップ
                 if (trigger.hasAttribute('data-chatbot-bound')) return;
 
                 trigger.addEventListener('click', (e) => {
@@ -500,11 +507,11 @@
                     this.openModal();
                 });
 
-                // 바인딩 완료 표시
+                // バインディング完了表示
                 trigger.setAttribute('data-chatbot-bound', 'true');
             });
 
-            // 클래스 기반 트리거
+            // クラスベースのトリガー
             const classTriggers = document.querySelectorAll('.chatbot-trigger-link');
 
             classTriggers.forEach(trigger => {
@@ -534,9 +541,9 @@
             }
             this.overlay.classList.add('open');
             this.modal.classList.add('open');
-            // document.body.style.overflow = 'hidden'; // Body 스크롤 잠금 제거
+            // document.body.style.overflow = 'hidden'; // Bodyスクロールロック削除
 
-            // 미리 로드된 iframe 사용 또는 새로 로드
+            // 事前ロードされたiframeを使用または新規ロード
             if (this.iframe && this.isIframePreloaded) {
                 this.showPreloadedIframe();
             } else {
@@ -551,7 +558,7 @@
             }
             this.overlay.classList.remove('open');
             this.modal.classList.remove('open');
-            // document.body.style.overflow = ''; // Body 스크롤 잠금 해제 제거
+            // document.body.style.overflow = ''; // Bodyスクロールロック解除削除
         }
 
         showPreloadedIframe() {
@@ -565,7 +572,7 @@
                         content.removeChild(loading);
                     }
 
-                    // 미리 로드된 iframe을 모달에 이동
+                    // 事前ロードされたiframeをモーダルに移動
                     this.iframe.style.display = 'block';
                     this.iframe.style.opacity = '0';
                     content.appendChild(this.iframe);
@@ -582,7 +589,7 @@
             const content = this.modal.querySelector('.chatbot-content');
             let isLoaded = false;
 
-            // iframe 생성 (아직 없는 경우만)
+            // iframe作成（まだない場合のみ）
             if (!this.iframe) {
                 this.iframe = document.createElement('iframe');
                 this.iframe.className = 'chatbot-iframe';
@@ -612,20 +619,20 @@
                 }
             };
 
-            // 로딩 완료 후 로딩 화면 제거
+            // ロード完了後ロード画面削除
             this.iframe.onload = () => {
                 console.log('iframe loaded successfully');
                 showIframe();
             };
 
-            // 타임아웃으로 강제 로딩 완료 (3초 후)
+            // タイムアウトで強制ロード完了（3秒後）
             setTimeout(() => {
                 if (!isLoaded) {
                     showIframe();
                 }
             }, 3000);
 
-            // 에러 처리
+            // エラー処理
             this.iframe.onerror = () => {
                 content.innerHTML = `
                     <div class="chatbot-loading">
@@ -639,7 +646,7 @@
             };
         }
 
-        // 유틸리티 함수들
+        // ユーティリティ関数
         hexToRgba(hex, alpha) {
             const r = parseInt(hex.slice(1, 3), 16);
             const g = parseInt(hex.slice(3, 5), 16);
@@ -659,11 +666,11 @@
         }
     }
 
-    // 전역 객체에 등록
+    // グローバルオブジェクトに登録
     window.ChatbotWidget = ChatbotWidget;
 
-    // 자동 초기화 
-    // DOM이 완전히 로드된 후 초기화하여 window.chatbotWidgetOptions를 확인
+    // 自動初期化 
+    // DOMが完全にロードされた後に初期化してwindow.chatbotWidgetOptionsを確認
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             if (!window.chatbotWidgetInstance) {
