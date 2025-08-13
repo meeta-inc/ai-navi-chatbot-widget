@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャットボットウィジェットテスト</title>
+    <title>%VITE_DEMO_TITLE%</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -273,9 +273,9 @@ window.chatbotWidgetOptions = {
                 primaryColor: '#1a202c',
                 secondaryColor: '#2d3748',
                 position: 'right',
-                chatbotUrl: 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
-                clientId: 'RS000002', // 開発環境用クライアントID
-                appId: '0002' // 開発環境用アプリID
+                chatbotUrl: '%VITE_DEV2_URL%' || 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
+                clientId: '%VITE_DEV2_CLIENT_ID%' || 'RS000002', // 開発環境用クライアントID
+                appId: '%VITE_DEV2_APP_ID%' || '0002' // 開発環境用アプリID
             });
             // ウィジェットを作成後、すぐに開く
             setTimeout(() => {

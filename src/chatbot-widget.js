@@ -8,16 +8,16 @@
 
     class ChatbotWidget {
         constructor(options = {}) {
-            // デフォルト設定
+            // デフォルト設定 (環境変数からも取得)
             this.config = {
                 title: options.title || '🤖 AI Navi',
                 primaryColor: options.primaryColor || '#ff6b35',
                 secondaryColor: options.secondaryColor || '#f7931e',
-                chatbotUrl: options.chatbotUrl || 'https://ainavi-dev.meeta.jp/',
+                chatbotUrl: options.chatbotUrl || (typeof import !== 'undefined' && import.meta?.env?.VITE_CHATBOT_URL) || 'https://ainavi-dev.meeta.jp/',
                 position: options.position || 'right', // 'left' or 'right'
                 showTriggerButton: options.showTriggerButton !== false, // デフォルトはtrue
-                clientId: options.clientId || 'RS000001', // クライアントID
-                appId: options.appId || '0001', // アプリID
+                clientId: options.clientId || (typeof import !== 'undefined' && import.meta?.env?.VITE_CLIENT_ID) || 'RS000001', // クライアントID
+                appId: options.appId || (typeof import !== 'undefined' && import.meta?.env?.VITE_APP_ID) || '0001', // アプリID
                 ...options
             };
 

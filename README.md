@@ -12,7 +12,25 @@
 
 ## インストール
 
-1. HTMLにウィジェットスクリプトを含めます：
+### 環境変数の設定
+
+1. `.env.example`を`.env`にコピーして環境変数を設定します：
+
+```bash
+cp .env.example .env
+```
+
+2. `.env`ファイルを編集して必要な値を設定：
+
+```env
+# 基本設定
+VITE_CLIENT_ID=RS000001        # クライアントID
+VITE_APP_ID=0001               # アプリID
+VITE_DEMO_TITLE=テストページ    # デモページのタイトル
+VITE_CHATBOT_URL=https://...    # チャットボットURL
+```
+
+3. HTMLにウィジェットスクリプトを含めます：
 
 ```html
 <script src="src/chatbot-widget.js"></script>
@@ -52,11 +70,13 @@ window.chatbotWidgetOptions = {
 | `title` | string | '🤖 AIアシスタント' | ヘッダーに表示されるウィジェットタイトル |
 | `primaryColor` | string | '#ff6b35' | グラデーションメインカラー |
 | `secondaryColor` | string | '#f7931e' | グラデーションサブカラー |
-| `chatbotUrl` | string | 'https://ainavi-dev.meeta.jp/' | チャットボットアプリケーションURL |
+| `chatbotUrl` | string | 環境変数 or 'https://ainavi-dev.meeta.jp/' | チャットボットアプリケーションURL |
 | `position` | string | 'right' | トリガーボタン位置（'left' または 'right'） |
 | `showTriggerButton` | boolean | true | フローティングトリガーボタンの表示/非表示 |
-| `clientId` | string | 'RS000001' | クライアントID（チャットボット設定識別用） |
-| `appId` | string | '0001' | アプリケーションID（チャットボットインスタンス識別用） |
+| `clientId` | string | 環境変数 or 'RS000001' | クライアントID（チャットボット設定識別用） |
+| `appId` | string | 環境変数 or '0001' | アプリケーションID（チャットボットインスタンス識別用） |
+
+※ 環境変数での設定が優先され、次にコード内での指定、最後にデフォルト値が使用されます。
 
 ## リンクトリガー
 
