@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Navi 챗봇 위젯 - 모바일 테스트</title>
+    <title>AI Navi チャットボットウィジェット - モバイルテスト</title>
     <style>
         body {
             font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -101,49 +101,49 @@
 </head>
 <body>
     <div class="container">
-        <h1>🤖 AI Navi 챗봇 위젯</h1>
-        <p class="subtitle">모바일 트리거 버튼 테스트</p>
+        <h1>🤖 AI Navi チャットボットウィジェット</h1>
+        <p class="subtitle">モバイルトリガーボタンテスト</p>
 
         <div class="test-section">
-            <h2>📱 디바이스 정보</h2>
+            <h2>📱 デバイス情報</h2>
             <div class="device-info" id="deviceInfo">
-                감지 중...
+                検出中...
             </div>
         </div>
 
         <div class="test-section">
-            <h2>🎨 디자인 스펙</h2>
+            <h2>🎨 デザインスペック</h2>
             <div class="info-box">
-                <strong>모바일 트리거 버튼:</strong><br>
-                - 크기: 80px × 80px<br>
-                - 배경색: #F97316 (Orange)<br>
-                - 그림자: 2px 4px 4px rgba(0,0,0,0.25)<br>
-                - 아이콘: 24px × 24px 메시지 아이콘
+                <strong>モバイルトリガーボタン:</strong><br>
+                - サイズ: 80px × 80px<br>
+                - 背景色: #F97316 (Orange)<br>
+                - 影: 2px 4px 4px rgba(0,0,0,0.25)<br>
+                - アイコン: 24px × 24px メッセージアイコン
             </div>
         </div>
 
         <div class="test-section">
-            <h2>🔧 테스트 컨트롤</h2>
+            <h2>🔧 テストコントロール</h2>
             <div class="test-controls">
-                <button onclick="toggleWidget()">위젯 토글</button>
-                <button onclick="simulateMobile()">모바일 시뮬레이션</button>
-                <button onclick="simulateDesktop()">데스크톱 시뮬레이션</button>
-                <button onclick="location.reload()">새로고침</button>
+                <button onclick="toggleWidget()">ウィジェットトグル</button>
+                <button onclick="simulateMobile()">モバイルシミュレーション</button>
+                <button onclick="simulateDesktop()">デスクトップシミュレーション</button>
+                <button onclick="location.reload()">更新</button>
             </div>
         </div>
 
         <div class="test-section">
-            <h2>📱 모바일 프레임 테스트</h2>
+            <h2>📱 モバイルフレームテスト</h2>
             <div class="mobile-test-frame">
                 <iframe src="about:blank" id="mobileFrame"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 챗봇 위젯 스크립트 -->
+    <!-- チャットボットウィジェットスクリプト -->
     <script src="src/chatbot-widget.js"></script>
     <script>
-        // 디바이스 정보 표시
+        // デバイス情報表示
         function updateDeviceInfo() {
             const info = {
                 userAgent: navigator.userAgent,
@@ -160,20 +160,20 @@
                 <strong>Screen:</strong> ${info.screenWidth} × ${info.screenHeight}<br>
                 <strong>Viewport:</strong> ${info.viewportWidth} × ${info.viewportHeight}<br>
                 <strong>Pixel Ratio:</strong> ${info.devicePixelRatio}<br>
-                <strong>모바일 감지:</strong> ${info.isMobile ? '✅ 모바일' : '❌ 데스크톱'}
+                <strong>モバイル検出:</strong> ${info.isMobile ? '✅ モバイル' : '❌ デスクトップ'}
             `;
         }
 
-        // 위젯 초기화
+        // ウィジェット初期化
         const widget = new ChatbotWidget({
-            title: 'AI Navi 챗봇',
+            title: 'AI Navi チャットボット',
             primaryColor: '#F97316',
             secondaryColor: '#ea580c',
             chatbotUrl: 'https://ainavi-dev.meeta.jp/',
             position: 'right'
         });
 
-        // 위젯 토글
+        // ウィジェットトグル
         function toggleWidget() {
             if (widget.isOpen) {
                 widget.close();
@@ -182,22 +182,22 @@
             }
         }
 
-        // 모바일 시뮬레이션
+        // モバイルシミュレーション
         function simulateMobile() {
-            // viewport 변경
+            // viewport変更
             const viewport = document.querySelector('meta[name="viewport"]');
             viewport.content = 'width=375, initial-scale=1.0';
             location.reload();
         }
 
-        // 데스크톱 시뮬레이션
+        // デスクトップシミュレーション
         function simulateDesktop() {
             const viewport = document.querySelector('meta[name="viewport"]');
             viewport.content = 'width=1024, initial-scale=1.0';
             location.reload();
         }
 
-        // 모바일 프레임에 페이지 로드
+        // モバイルフレームにページロード
         function loadMobileFrame() {
             const frame = document.getElementById('mobileFrame');
             const html = `
@@ -218,12 +218,12 @@
                     </style>
                 </head>
                 <body>
-                    <h3>모바일 프레임 테스트</h3>
-                    <p>이 프레임 내에서 챗봇 위젯을 테스트합니다.</p>
+                    <h3>モバイルフレームテスト</h3>
+                    <p>このフレーム内でチャットボットウィジェットをテストします。</p>
                     <script src="src/chatbot-widget.js"><\/script>
                     <script>
                         new ChatbotWidget({
-                            title: 'AI Navi 챗봇',
+                            title: 'AI Navi チャットボット',
                             primaryColor: '#F97316',
                             position: 'right'
                         });
@@ -234,7 +234,7 @@
             frame.srcdoc = html;
         }
 
-        // 초기화
+        // 初期化
         updateDeviceInfo();
         loadMobileFrame();
         window.addEventListener('resize', updateDeviceInfo);
