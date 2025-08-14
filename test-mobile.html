@@ -164,13 +164,15 @@
             `;
         }
 
-        // ウィジェット初期化
+        // ウィジェット初期化（環境変数対応）
         const widget = new ChatbotWidget({
             title: 'AI Navi チャットボット',
             primaryColor: '#F97316',
             secondaryColor: '#ea580c',
-            chatbotUrl: 'https://ainavi-dev.meeta.jp/',
-            position: 'right'
+            position: 'right',
+            clientId: '%VITE_CLIENT_ID%',
+            appId: '%VITE_APP_ID%',
+            chatbotUrl: '%VITE_CHATBOT_URL%'
         });
 
         // ウィジェットトグル

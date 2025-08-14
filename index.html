@@ -296,7 +296,10 @@ window.chatbotWidgetOptions = {
                 title: '💙 ブルーアシスタント',
                 primaryColor: '#4299e1',
                 secondaryColor: '#3182ce',
-                position: 'right'
+                position: 'right',
+                chatbotUrl: '%VITE_CHATBOT_URL%' || 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
+                clientId: '%VITE_CLIENT_ID%' || 'RS000002', // 開発環境用クライアントID
+                appId: '%VITE_APP_ID%' || '0002' // 開発環境用アプリID
             });
         }
 
@@ -306,7 +309,10 @@ window.chatbotWidgetOptions = {
                 title: '💚 グリーンヘルパー',
                 primaryColor: '#48bb78',
                 secondaryColor: '#38a169',
-                position: 'right'
+                position: 'right',
+                chatbotUrl: '%VITE_CHATBOT_URL%' || 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
+                clientId: '%VITE_CLIENT_ID%' || 'RS000002', // 開発環境用クライアントID
+                appId: '%VITE_APP_ID%' || '0002' // 開発環境用アプリID
             });
         }
 
@@ -316,7 +322,10 @@ window.chatbotWidgetOptions = {
                 title: '🧡 オレンジチャットボット',
                 primaryColor: '#ff6b35',
                 secondaryColor: '#f7931e',
-                position: 'right'
+                position: 'right',
+                chatbotUrl: '%VITE_CHATBOT_URL%' || 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
+                clientId: '%VITE_CLIENT_ID%' || 'RS000002', // 開発環境用クライアントID
+                appId: '%VITE_APP_ID%' || '0002' // 開発環境用アプリID
             });
         }
 
@@ -326,7 +335,10 @@ window.chatbotWidgetOptions = {
                 title: '💜 パープルチャットボット',
                 primaryColor: '#9f7aea',
                 secondaryColor: '#805ad5',
-                position: 'right'
+                position: 'right',
+                chatbotUrl: '%VITE_CHATBOT_URL%' || 'https://dev2.dy4dah5zzytzy.amplifyapp.com/',
+                clientId: '%VITE_CLIENT_ID%' || 'RS000002', // 開発環境用クライアントID
+                appId: '%VITE_APP_ID%' || '0002' // 開発環境用アプリID
             });
         }
 
@@ -344,14 +356,38 @@ window.chatbotWidgetOptions = {
 
     <!-- チャットボットウィジェットスクリプト読み込み -->
     <script>
+        // デフォルトのウィジェット設定（環境変数から）
+        // 本番ビルドでは %VITE_*% パターンが置換される
+        
         // 開発環境と本番環境の区別
         if (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.port) {
+            window.chatbotWidgetOptions = {
+                chatbotUrl: 'https://ainavi-dev.meeta.jp/',  // 개발 환경에서 실제 URL 사용
+                clientId: 'MM000002',  // 개발 환경용 클라이언트 ID
+                appId: '0001'  // 개발 환경용 앱 ID
+            };
             // 開発環境: ソースファイル直接読み込み
             const script = document.createElement('script');
             script.type = 'module';
             script.src = '/src/chatbot-widget.js';
             document.head.appendChild(script);
+        } else if (location.hostname === 'demo-meimonkai.meeta.jp') {
+            // demo-meimonkai 도메인 전용 설정
+            window.chatbotWidgetOptions = {
+                chatbotUrl: 'https://ainavi-dev.meeta.jp/',
+                clientId: 'MM000002',
+                appId: '0001'
+            };
+            // 本番環境: ビルドされたファイル読み込み
+            const script = document.createElement('script');
+            script.src = '/chatbot-widget.iife.js';
+            document.head.appendChild(script);
         } else {
+            window.chatbotWidgetOptions = {
+                chatbotUrl: '%VITE_CHATBOT_URL%',
+                clientId: '%VITE_CLIENT_ID%',
+                appId: '%VITE_APP_ID%'
+            };
             // 本番環境: ビルドされたファイル読み込み
             const script = document.createElement('script');
             script.src = '/chatbot-widget.iife.js';
