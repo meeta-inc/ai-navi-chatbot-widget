@@ -203,6 +203,13 @@
                     flex-shrink: 0;
                     min-height: 36px;
                 }
+                
+                /* 헤더 버튼 그룹 */
+                .chatbot-header-buttons {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
 
                 .chatbot-title {
                     font-size: 14px;
@@ -210,6 +217,39 @@
                     margin: 0;
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
                     line-height: 1.1;
+                }
+
+                /* 리셋 버튼 스타일 */
+                .chatbot-reset {
+                    background: none;
+                    border: none;
+                    color: #B7B7B7;
+                    cursor: pointer;
+                    padding: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                    flex-shrink: 0;
+                }
+                
+                .chatbot-reset:hover {
+                    background-color: rgba(0, 0, 0, 0.05);
+                    color: #666;
+                }
+                
+                .chatbot-reset:active {
+                    transform: scale(0.95);
+                    color: #333;
+                }
+                
+                .chatbot-reset svg {
+                    width: 24px;
+                    height: 24px;
+                    flex-shrink: 0;
                 }
 
                 .chatbot-close {
@@ -392,16 +432,23 @@
             this.modal = document.createElement('div');
             this.modal.className = 'chatbot-modal';
 
-            // ヘッダー作成
+            // 헤더 생성
             const header = document.createElement('div');
             header.className = 'chatbot-header';
             header.innerHTML = `
                 <h3 class="chatbot-title">${this.config.title}</h3>
-                <button class="chatbot-close" aria-label="チャットボットを閉じる" title="チャットボットを閉じる">
-                    <svg class="chatbot-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M4.99422 3.90637C4.73832 3.90637 4.47072 3.99238 4.27542 4.18738C3.88492 4.57838 3.88492 5.23437 4.27542 5.62537L10.5567 11.9064L4.27542 18.1874C3.88492 18.5784 3.88492 19.2344 4.27542 19.6254C4.66602 20.0154 5.32242 20.0154 5.71302 19.6254L11.9942 13.3444L18.2754 19.6254C18.666 20.0154 19.3224 20.0154 19.713 19.6254C20.1035 19.2344 20.1035 18.5784 19.713 18.1874L13.4317 11.9064L19.713 5.62537C20.1035 5.23437 20.1035 4.57838 19.713 4.18738C19.5177 3.99238 19.25 3.90637 18.9942 3.90637C18.7383 3.90637 18.4708 3.99238 18.2754 4.18738L11.9942 10.4684L5.71302 4.18738C5.51772 3.99238 5.25012 3.90637 4.99422 3.90637Z" fill="currentColor"/>
-                    </svg>
-                </button>
+                <div class="chatbot-header-buttons">
+                    <button class="chatbot-reset" aria-label="最初に戻る" title="最初に戻る">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18.7412 3.9248V7.42773C18.7408 7.77572 18.6025 8.10938 18.3564 8.35547C18.1411 8.57077 17.859 8.70424 17.5586 8.73438L17.4287 8.74121H13.9248V7.25781H16.5762C15.523 6.24174 14.1608 5.60253 12.7021 5.44629C11.183 5.28358 9.65443 5.65382 8.37793 6.49316C7.10156 7.33245 6.1565 8.58898 5.7041 10.0479C5.25173 11.5069 5.32058 13.0781 5.89844 14.4922C6.47631 15.9062 7.52728 17.0759 8.87207 17.8008C10.2167 18.5255 11.7715 18.7612 13.2705 18.4668C14.7696 18.1723 16.1203 17.3661 17.0908 16.1865C18.0613 15.0069 18.5919 13.5264 18.5918 11.999V11.9238H20.0752V11.999C20.0757 13.8476 19.4418 15.6407 18.2793 17.0781C17.1167 18.5156 15.4956 19.5102 13.6875 19.8965C11.8793 20.2828 9.99344 20.0371 8.34473 19.2002C6.696 18.3633 5.38407 16.9863 4.62891 15.2988C3.87376 13.6113 3.72069 11.7155 4.19531 9.92871C4.66997 8.14204 5.74427 6.57286 7.2373 5.48242C8.73026 4.39207 10.5519 3.84629 12.3984 3.9375C14.1903 4.02611 15.8998 4.70967 17.2588 5.87598V3.9248H18.7412Z" fill="currentColor" stroke="currentColor" stroke-width="0.15"/>
+                        </svg>
+                    </button>
+                    <button class="chatbot-close" aria-label="チャットボットを閉じる" title="チャットボットを閉じる">
+                        <svg class="chatbot-close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M4.99422 3.90637C4.73832 3.90637 4.47072 3.99238 4.27542 4.18738C3.88492 4.57838 3.88492 5.23437 4.27542 5.62537L10.5567 11.9064L4.27542 18.1874C3.88492 18.5784 3.88492 19.2344 4.27542 19.6254C4.66602 20.0154 5.32242 20.0154 5.71302 19.6254L11.9942 13.3444L18.2754 19.6254C18.666 20.0154 19.3224 20.0154 19.713 19.6254C20.1035 19.2344 20.1035 18.5784 19.713 18.1874L13.4317 11.9064L19.713 5.62537C20.1035 5.23437 20.1035 4.57838 19.713 4.18738C19.5177 3.99238 19.25 3.90637 18.9942 3.90637C18.7383 3.90637 18.4708 3.99238 18.2754 4.18738L11.9942 10.4684L5.71302 4.18738C5.51772 3.99238 5.25012 3.90637 4.99422 3.90637Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
             `;
 
             // コンテンツエリア作成
@@ -434,7 +481,13 @@
             //     this.closeModal();
             // });
 
-            // 閉じるボタンクリック
+            // 리셋 버튼 클릭
+            const resetButton = this.modal.querySelector('.chatbot-reset');
+            resetButton.addEventListener('click', () => {
+                this.resetChatbot();
+            });
+
+            // 닫기 버튼 클릭
             const closeButton = this.modal.querySelector('.chatbot-close');
             closeButton.addEventListener('click', () => {
                 this.closeModal();
@@ -559,6 +612,18 @@
             this.overlay.classList.remove('open');
             this.modal.classList.remove('open');
             // document.body.style.overflow = ''; // Bodyスクロールロック解除削除
+        }
+        
+        // 챗봇 리셋 기능
+        resetChatbot() {
+            if (this.iframe && this.iframe.src) {
+                // iframe 새로고침 (확인 없이 바로 실행)
+                const currentSrc = this.iframe.src;
+                this.iframe.src = 'about:blank';
+                setTimeout(() => {
+                    this.iframe.src = currentSrc;
+                }, 100);
+            }
         }
 
         showPreloadedIframe() {
