@@ -514,7 +514,7 @@
             const url = new URL(this.config.chatbotUrl);
             url.searchParams.set('clientId', this.config.clientId);
             url.searchParams.set('appId', this.config.appId);
-            
+
             // 隠しiframeを事前に作成してロード開始
             this.iframe = document.createElement('iframe');
             this.iframe.className = 'chatbot-iframe';
@@ -528,8 +528,50 @@
                 this.isIframePreloaded = true;
             };
 
+            // iframe의 READY 메시지를 수신하여 INITIAL_DATA 응답
+            this.setupPostMessageHandler();
+
             // bodyに隠した状態で追加して事前ロード
             document.body.appendChild(this.iframe);
+        }
+
+        // iframe과의 postMessage 통신 설정
+        setupPostMessageHandler() {
+            this.messageHandler = (event) => {
+                let message;
+                if (typeof event.data === 'string') {
+                    try {
+                        message = JSON.parse(event.data);
+                    } catch {
+                        return;
+                    }
+                } else {
+                    message = event.data;
+                }
+
+                // iframe에서 READY 메시지를 받으면 INITIAL_DATA 응답
+                if (message && message.type === 'READY') {
+                    this.sendInitialData();
+                }
+            };
+
+            window.addEventListener('message', this.messageHandler);
+        }
+
+        // iframe에 INITIAL_DATA 전송
+        sendInitialData() {
+            if (!this.iframe || !this.iframe.contentWindow) return;
+
+            const initialData = {
+                type: 'INITIAL_DATA',
+                payload: {
+                    clientId: this.config.clientId,
+                    appId: this.config.appId
+                }
+            };
+
+            this.iframe.contentWindow.postMessage(initialData, '*');
+            console.log('INITIAL_DATA sent to iframe:', initialData.payload);
         }
 
         bindLinkTriggers() {
